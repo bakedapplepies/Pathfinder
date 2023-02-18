@@ -59,7 +59,7 @@ class Window:
     def DrawGrid(self):
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
-                pygame.draw.rect(self.grid[i][j])
+                pygame.draw.rect(self.window, BLACK, self.grid[i][j])
     
 
 if __name__ == "__main__":
