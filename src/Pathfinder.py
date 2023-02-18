@@ -28,7 +28,7 @@ class Window:
         # self.player = pygame.Rect(0, 0, 100, 100)
         
         # Grid
-        self.grid = Grid()
+        self.grid = Grid(RESOLUTION)
         
     def Loop(self):
         deltaTime = 0
@@ -43,19 +43,23 @@ class Window:
             
             pygame.display.update()
             clock.tick(FPS)
-            
+
+    # INPUTS
     def PollInput(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
                 
+    # RENDERING
     def Render(self):
         self.window.fill(WHITE)
         self.DrawGrid()
         
     def DrawGrid(self):
-        pass
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[0])):
+                pygame.draw.rect(self.grid[i][j])
     
 
 if __name__ == "__main__":
