@@ -20,7 +20,7 @@ class Window:
         pygame.display.set_caption("Pathfinder")
         self.window = pygame.display.set_mode(RESOLUTION, pygame.RESIZABLE)
 
-        icon = pygame.image.load("resources/icons/icon.ico")
+        icon = pygame.image.load("resources/icons/32_pathfinder_icon.png")
         pygame.display.set_icon(icon)
         
         # Game variables

@@ -1,5 +1,4 @@
 import pygame
-import numpy
 
 from constants import *
 
