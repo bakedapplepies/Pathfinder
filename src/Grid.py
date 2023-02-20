@@ -22,7 +22,7 @@ class Grid(list):
     def setStartNode(self, x: int, y: int):
         row = int(y / self.sideLength)
         column = int(x / self.sideLength)
-        if self.rowStart != None and (row != self.rowStart or column != self.columnStart):
+        if self.rowStart != None and (row != self.rowStart or column != self.columnStart) and (row < len(self) and column < len(self[0])):
             self[self.rowStart][self.columnStart].setState("Path")
         self.rowStart = row
         self.columnStart = column
@@ -30,7 +30,7 @@ class Grid(list):
     def setDestinationNode(self, x: int, y: int):
         row = int(y / self.sideLength)
         column = int(x / self.sideLength)
-        if self.rowDestination != None and (row != self.rowDestination or column != self.columnDestination):
+        if row != self.rowDestination or column != self.columnDestination:
             self[self.rowDestination][self.columnDestination].setState("Path")
         self.rowDestination = row
         self.columnDestination = column
@@ -40,7 +40,6 @@ class Node(pygame.Rect):
         super().__init__(x, y, dx, dy)
         self.color = WHITE
         self.border_color = BLACK
-        self.border = 1
 
     def setState(self, state: str, grid: Grid = None, pos: tuple = None):
         if state == "Path":

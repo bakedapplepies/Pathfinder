@@ -1,11 +1,15 @@
 import sys
 import pygame
 import time
+import ctypes
 import logging
 
 from Grid import Grid
 from constants import *
 
+
+# TODO: Until the middle mouse button is released, walls affected by starting points/destinations will
+#       revert back to walls.
 
 RESOLUTION = (1200, 800)
 
@@ -20,18 +24,15 @@ class Window:
         pygame.display.set_caption("Pathfinder")
         self.window = pygame.display.set_mode(RESOLUTION, pygame.RESIZABLE)
 
-        icon = pygame.image.load("resources/icons/32_pathfinder_icon.png")
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("abc")
+        icon = pygame.image.load("resources/icons/32_pathfinder_icon.png").convert()
         pygame.display.set_icon(icon)
         
         # Game variables
         self.running = True
         
-        # Player
-        # self.player = pygame.Rect(0, 0, 100, 100)
-        
         # Grid
         self.grid = Grid(RESOLUTION)
-        # self.grid.__init__()
 
     def Loop(self):
         deltaTime = 0.0
@@ -58,18 +59,18 @@ class Window:
                 self.grid = Grid((event.w, event.h))
             if pygame.mouse.get_pressed()[2]:
                 mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Path", self.grid, mouse_pos)
+                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState("Path", self.grid, mouse_pos)
             elif pygame.mouse.get_pressed()[0]:
                 # print(pygame.mouse.get_pressed())
                 mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Wall", self.grid, mouse_pos)
+                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState("Wall", self.grid, mouse_pos)
             elif pygame.mouse.get_pressed()[1]:
                 if not pygame.key.get_pressed()[pygame.K_LCTRL]:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Start", self.grid, mouse_pos)
+                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState("Start", self.grid, mouse_pos)
                 else:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Destination", self.grid, mouse_pos)
+                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState("Destination", self.grid, mouse_pos)
 
 
     # RENDERING
