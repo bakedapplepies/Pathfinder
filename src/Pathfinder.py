@@ -7,6 +7,8 @@ import logging
 from Grid import Grid
 from constants import *
 
+from BFS import *
+
 
 # TODO: Until the middle mouse button is released, walls affected by starting points/destinations will
 #       revert back to walls.
