@@ -58,18 +58,18 @@ class Window:
                 self.grid = Grid((event.w, event.h))
             if pygame.mouse.get_pressed()[2]:
                 mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Path")
+                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Path", self.grid, mouse_pos)
             elif pygame.mouse.get_pressed()[0]:
                 # print(pygame.mouse.get_pressed())
                 mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Wall")
+                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Wall", self.grid, mouse_pos)
             elif pygame.mouse.get_pressed()[1]:
                 if not pygame.key.get_pressed()[pygame.K_LCTRL]:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Start")
+                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Start", self.grid, mouse_pos)
                 else:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Destination")
+                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), RESOLUTION[1]/self.grid.sideLength)][min(int(mouse_pos[0]/self.grid.sideLength), RESOLUTION[0]/self.grid.sideLength)].setState("Destination", self.grid, mouse_pos)
 
 
     # RENDERING
@@ -81,7 +81,7 @@ class Window:
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
                 pygame.draw.rect(self.window, self.grid[i][j].color, self.grid[i][j])
-                pygame.draw.rect(self.window, self.grid[i][j].border_color, self.grid[i][j], self.grid[i][j].border)
+                pygame.draw.rect(self.window, self.grid[i][j].border_color, self.grid[i][j], 1)
     
 
 if __name__ == "__main__":
