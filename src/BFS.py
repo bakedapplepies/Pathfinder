@@ -5,9 +5,9 @@ from Grid import *
 
 def BreadthFirstSearch(grid: Grid):
     frontier = Queue()
-    frontier.put(grid[grid.rowStart][grid.columnStart])
+    frontier.put((grid.rowStart, grid.columnStart))
     reached = set()
-    reached.add(grid[grid.rowStart][grid.columnStart])
+    reached.add((grid.rowStart, grid.columnStart))
     
     while not frontier.empty():
         current = frontier.get()
