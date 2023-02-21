@@ -1,5 +1,6 @@
 import pygame
 
+from Node import Node
 from constants import *
 
 
@@ -19,6 +20,14 @@ class Grid(list):
             for j in range(0, resolution[0], self.sideLength):
                 super().__getitem__(int(i/self.sideLength)).append(Node(j, i, self.sideLength, self.sideLength))
                 
+    def getNeighbors(self, node: Node) -> tuple:
+        return (
+            self[int(node.height/self.sideLength) + 1][int(node.width/self.sideLength)],
+            self[int(node.height/self.sideLength) - 1][int(node.width/self.sideLength)],
+            self[int(node.height/self.sideLength)][int(node.width/self.sideLength) + 1],
+            self[int(node.height/self.sideLength)][int(node.width/self.sideLength) - 1]
+        )
+                
     def setStartNode(self, x: int, y: int):
         row = int(y / self.sideLength)
         column = int(x / self.sideLength)
@@ -34,23 +43,4 @@ class Grid(list):
             self[self.rowDestination][self.columnDestination].setState("Path")
         self.rowDestination = row
         self.columnDestination = column
-        
-    
-class Node(pygame.Rect):
-    def __init__(self, x, y, dx, dy):
-        super().__init__(x, y, dx, dy)
-        self.color = WHITE
-        self.border_color = BLACK
-
-    def setState(self, state: str, grid: Grid = None, pos: tuple = None):
-        if state == "Path":
-            self.color = WHITE
-        elif state == "Wall" and not (self.color == RED or self.color == BLUE):
-            self.color = BLACK
-        elif state == "Start":
-            self.color = RED
-            grid.setStartNode(pos[0], pos[1])
-        elif state == "Destination":
-            self.color = BLUE
-            grid.setDestinationNode(pos[0], pos[1])
             

@@ -2,9 +2,12 @@ import sys
 import pygame
 import time
 import ctypes
+import threading
 import logging
 
 from Grid import Grid
+from GUIControl import GUIControl
+from BFS import BreadthFirstSearch
 from constants import *
 
 from BFS import *
@@ -35,6 +38,9 @@ class Window:
         
         # Grid
         self.grid = Grid(RESOLUTION)
+        
+        # GUI Controls
+        # self.gui = GUIControl()
 
     def Loop(self):
         deltaTime = 0.0
@@ -47,6 +53,7 @@ class Window:
             
             self.Render()
             
+            # self.gui.mainloop()
             pygame.display.update()
             clock.tick(FPS)
 
@@ -73,7 +80,9 @@ class Window:
                 else:
                     mouse_pos = pygame.mouse.get_pos()
                     self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState("Destination", self.grid, mouse_pos)
-
+        if pygame.key.get_pressed()[pygame.K_b]:
+            BreadthFirstSearch(self.grid)
+        
 
     # RENDERING
     def Render(self):
@@ -85,9 +94,32 @@ class Window:
             for j in range(len(self.grid[0])):
                 pygame.draw.rect(self.window, self.grid[i][j].color, self.grid[i][j])
                 pygame.draw.rect(self.window, self.grid[i][j].border_color, self.grid[i][j], 1)
+
     
+def tkinter_thread_handler():
+    gui = GUIControl()
+    gui.mainloop()
+    
+def pathfinder_thread_handler():
+    Pathfinder = Window()
+    Pathfinder.Loop()
+
+def thread_handler():
+    try:
+        pathfinderThread = threading.Thread(target=pathfinder_thread_handler)
+        tkinterThread = threading.Thread(target=tkinter_thread_handler)
+        
+        pathfinderThread.start()
+        tkinterThread.start()
+        
+        pathfinderThread.join()
+        tkinterThread.join()
+    except threading.ThreadError:
+        logging.exception("Threading Error")
+
 
 if __name__ == "__main__":
+    # thread_handler()
     Pathfinder = Window()
     Pathfinder.Loop()
     
