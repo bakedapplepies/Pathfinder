@@ -12,29 +12,27 @@ class Grid(list):
         self.columnStart: int = None
         self.rowDestination: int = None
         self.columnDestination: int = None
-
-        print(f"res: {resolution[0]}x{resolution[1]}")
         
         for i in range(0, resolution[1], self.sideLength):
             super().append([])
             for j in range(0, resolution[0], self.sideLength):
                 super().__getitem__(int(i/self.sideLength)).append(Node(j, i, self.sideLength, self.sideLength))
                 
-    def getNeighbors(self, node: Node):
-        x = int(node.width/self.sideLength)
-        y = int(node.height/self.sideLength)
+    def getNeighbors(self, nodePos: tuple):
+        row = nodePos[0]
+        col = nodePos[1]
         return (
-            (x + 1, y),
-            (x - 1, y),
-            (x, y + 1),
-            (x, y - 1)
+            (max(row - 1, 0), col),
+            (row, min(col + 1, len(self[0]) - 1)),
+            (min(row + 1, len(self) - 1), col),
+            (row, max(col - 1, 0))
         )
                 
     def setStartNode(self, x: int, y: int) -> None:
         row = int(y / self.sideLength)
         column = int(x / self.sideLength)
         if self.rowStart != None and (row != self.rowStart or column != self.columnStart) and (row < len(self) and column < len(self[0])):
-            self[self.rowStart][self.columnStart].setState("Path")
+            self[self.rowStart][self.columnStart].setState(NodeState.Path)
         self.rowStart = row
         self.columnStart = column
     
@@ -42,7 +40,7 @@ class Grid(list):
         row = int(y / self.sideLength)
         column = int(x / self.sideLength)
         if self.rowDestination != None and (row != self.rowDestination or column != self.columnDestination) and (row < len(self) and column < len(self[0])):
-            self[self.rowDestination][self.columnDestination].setState("Path")
+            self[self.rowDestination][self.columnDestination].setState(NodeState.Path)
         self.rowDestination = row
         self.columnDestination = column
             

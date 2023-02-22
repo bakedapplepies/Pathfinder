@@ -3,6 +3,9 @@ import time
 import ctypes
 import threading
 import logging
+import sys
+import subprocess
+import pkg_resources
 
 import SceneManager
 from GUIControl import GUIControl
@@ -13,6 +16,7 @@ from constants import *
 #       revert back to walls.
 
 clock = pygame.time.Clock()
+FPS = 60
 
 pygame.init()
 
@@ -28,15 +32,17 @@ class Window():
         
         # Window variables
         self.running: bool = True
+        self.deltaTime: float = None
         
         # Scene Manager
         self.sceneManager = SceneManager.SceneManager(window=self)
 
     def Loop(self):
-        deltaTime = 0.0
+        self.deltaTime = 0.0
         begin = time.time()
+        
         while self.running:
-            deltaTime = time.time() - begin
+            self.deltaTime = time.time() - begin
             begin = time.time()
             
             self.sceneManager.PollInput()
@@ -47,6 +53,15 @@ class Window():
             pygame.display.update()
             clock.tick(FPS)
 
+    
+def checkDependencies() -> None:
+    required = { "pygame", "pillow" }
+    installed = { pkg.key for pkg in pkg_resources.working_set }
+    missing = required - installed
+    
+    if missing:
+        python = sys.executable
+        subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
     
 def tkinter_thread_handler():
     gui = GUIControl()
@@ -71,6 +86,8 @@ def thread_handler():
 
 
 if __name__ == "__main__":
+    # checkDependencies()
+    
     # thread_handler()
     window = Window()
     window.Loop()

@@ -1,6 +1,5 @@
 import pygame
 
-# from Grid import Grid
 from constants import *
 
 
@@ -11,15 +10,15 @@ class Node(pygame.Rect):
         self.border_color = BLACK
 
     def setState(self, state: str, grid = None, pos: tuple = None):
-        if state == "Path":
+        if state == NodeState.Path:
             self.color = WHITE
-        elif state == "Wall" and not (self.color == RED or self.color == BLUE):
+        elif state == NodeState.Wall and not (self.color == RED or self.color == BLUE):
             self.color = BLACK
-        elif state == "Start":
+        elif state == NodeState.Start:
             self.color = RED
             grid.setStartNode(pos[0], pos[1])
-        elif state == "Destination":
+        elif state == NodeState.Destination:
             self.color = BLUE
             grid.setDestinationNode(pos[0], pos[1])
-        elif state == "Explored":
+        elif state == NodeState.Explored:
             self.color = GREY

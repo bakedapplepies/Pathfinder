@@ -1,9 +1,10 @@
 import pygame
 
-from Window import Window
 from AbstractScene import AbstractScene
-from Pathfinder import Pathfinder
+from Window import Window
 from Menu import Menu
+from Pathfinder import Pathfinder
+from constants import *
 
 
 class SceneManager(AbstractScene):
@@ -13,8 +14,8 @@ class SceneManager(AbstractScene):
         self.menu = Menu(window=window)
         
         self.scenes = {
-            "Pathfinder": self.pathfinder,
-            "Menu": self.menu,
+            Scenes.Pathfinder: self.pathfinder,
+            Scenes.Menu: self.menu,
         }
         
     def switchScene(self, sceneName: str) -> None:
