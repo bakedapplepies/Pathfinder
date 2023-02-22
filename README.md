@@ -1,2 +1,3 @@
 Dependencies:
 - Pygame
+- PIL (pillow)
