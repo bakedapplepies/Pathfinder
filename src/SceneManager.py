@@ -9,7 +9,7 @@ from constants import *
 
 class SceneManager(AbstractScene):
     def __init__(self, window: Window):
-        self.scene = "Pathfinder"
+        self.scene = Scenes.Pathfinder
         self.pathfinder = Pathfinder(window=window)
         self.menu = Menu(window=window)
         

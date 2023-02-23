@@ -16,7 +16,10 @@ class Menu(AbstractScene):
         self.pygame_window = window.pygame_window
         
         # widgets
-        # self.resume_button = pygame.Rect()
+        self.transparent_background = pygame.Surface(RESOLUTION)
+        self.transparent_background.set_alpha(210)
+        self.transparent_background.fill(GREY)
+        self.pygame_window.blit(self.transparent_background, RESOLUTION)
     
     # INPUTS
     def PollInput(self):
@@ -34,3 +37,6 @@ class Menu(AbstractScene):
     # RENDERING
     def Render(self):
         self.pygame_window.fill(WHITE)
+        self.window.sceneManager.pathfinder.DrawGrid()
+        self.pygame_window.blit(self.transparent_background, (0, 0))
+    

@@ -6,6 +6,7 @@ import logging
 import sys
 import subprocess
 import pkg_resources
+import profile
 
 import SceneManager
 from GUIControl import GUIControl
