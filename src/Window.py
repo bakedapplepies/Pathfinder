@@ -16,8 +16,6 @@ from constants import *
 # TODO: Until the middle mouse button is released, walls affected by starting points/destinations will
 #       revert back to walls.
 
-clock = pygame.time.Clock()
-FPS = 60
 
 pygame.init()
 
@@ -32,15 +30,21 @@ class Window():
         pygame.display.set_icon(icon)
         
         # Window variables
+        self.clock = pygame.time.Clock()
+
         self.running: bool = True
+        self.paused: bool = False
         self.deltaTime: float = None
         
         # Scene Manager
         self.sceneManager = SceneManager.SceneManager(window=self)
 
+    def showFPS(self):
+        pygame.display.set_caption(f"Pathfinder - FPS: {1/self.deltaTime}")
+
     def Loop(self):
         self.deltaTime = 0.0
-        begin = time.time()
+        begin = 0.0
         
         while self.running:
             self.deltaTime = time.time() - begin
@@ -52,7 +56,9 @@ class Window():
             
             # self.gui.mainloop()
             pygame.display.update()
-            clock.tick(FPS)
+            self.clock.tick(FPS)
+
+            self.showFPS()
 
     
 def checkDependencies() -> None:

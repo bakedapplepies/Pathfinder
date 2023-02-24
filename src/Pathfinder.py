@@ -51,6 +51,7 @@ class Pathfinder(AbstractScene):
             print("Started BFS.")
             BreadthFirstSearch(self.grid, self.window)
         elif keys[pygame.K_ESCAPE] and keydown:  # Menu
+            self.window.paused = True
             self.window.sceneManager.switchScene(Scenes.Menu)
         elif keys[pygame.K_g] and keydown:  # New Grid
             self.grid = Grid(RESOLUTION)

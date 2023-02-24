@@ -1,5 +1,6 @@
 # window details
 RESOLUTION = (1200, 800)
+FPS = 60
 
 # scenes
 class Scenes:
