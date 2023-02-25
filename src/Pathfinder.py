@@ -58,6 +58,8 @@ class Pathfinder(AbstractScene):
 
     # RENDERING
     def Render(self):
+        # if self.window.paused == False:
+        #     if self.window.sceneManager.menu.BFS_delay == "On":
         self.pygame_window.fill(WHITE)
         self.DrawGrid()
         

@@ -34,6 +34,7 @@ class Window():
 
         self.running: bool = True
         self.paused: bool = False
+        self.begin: float = None
         self.deltaTime: float = None
         
         # Scene Manager
@@ -44,21 +45,24 @@ class Window():
 
     def Loop(self):
         self.deltaTime = 0.0
-        begin = 0.0
+        self.begin = 0.0
         
         while self.running:
-            self.deltaTime = time.time() - begin
-            begin = time.time()
-            
-            self.sceneManager.PollInput()
-            
-            self.sceneManager.Render()
-            
-            # self.gui.mainloop()
-            pygame.display.update()
-            self.clock.tick(FPS)
+            self.EventSequence()
 
-            self.showFPS()
+    def EventSequence(self):
+        self.deltaTime = time.time() - self.begin
+        self.begin = time.time()
+        
+        self.sceneManager.PollInput()
+        
+        self.sceneManager.Render()
+        
+        # self.gui.mainloop()
+        pygame.display.update()
+        self.clock.tick(FPS)
+
+        self.showFPS()
 
     
 def checkDependencies() -> None:

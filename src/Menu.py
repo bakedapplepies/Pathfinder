@@ -37,11 +37,9 @@ class Menu(AbstractScene):
                     self.BFS_delay = "Off"
                 elif self.BFS_delay == "Off":
                     self.BFS_delay = "On"
-                print(self.BFS_delay)
                 self.BFS_delay_label.setText(f"Enable BFS delay: {self.BFS_delay}")
             elif event.type == pygame.KEYDOWN:
                 keydown = True
-            # print(self.BFS_delay_label.text_box.get_rect())
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE] and keydown:

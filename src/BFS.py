@@ -7,6 +7,8 @@ from Grid import *
 from constants import *
 
 
+# TODO: could try implementing saving reached node each time BFS is run
+
 def BreadthFirstSearch(grid: Grid, window: Window) -> None:
     frontier = Queue()
     frontier.put((grid.rowStart, grid.columnStart))
@@ -28,7 +30,8 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
 
         # keeping the window alive
         window.sceneManager.PollInput()
-        window.sceneManager.Render()
+        if window.sceneManager.menu.BFS_delay == "On":
+            window.sceneManager.Render()
         pygame.display.update()
-        window.clock.tick(FPS)
+        # window.clock.tick(FPS)
         window.showFPS()
