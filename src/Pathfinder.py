@@ -1,6 +1,5 @@
 import pygame
 import sys
-import logging
 
 from Window import Window
 from AbstractScene import AbstractScene
@@ -47,7 +46,6 @@ class Pathfinder(AbstractScene):
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_b] and keydown and self.grid.rowStart != None and self.grid.rowDestination != None:
-            logging.info("Started BFS.")
             print("Started BFS.")
             BreadthFirstSearch(self.grid, self.window)
         elif keys[pygame.K_ESCAPE] and keydown:  # Menu
