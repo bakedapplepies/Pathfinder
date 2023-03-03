@@ -4,20 +4,23 @@ FPS = 60
 
 # scenes
 class Scenes:
-    Pathfinder = "Pathfinder"
-    Menu = "Menu"
+    PATHFINDER = "Pathfinder"
+    MENU = "Menu"
     
 # node states
 class NodeState:
-    Path = "Path"
-    Wall = "Wall"
-    Start = "Start"
-    Destination = "Destination"
-    Explored = "Explored"
+    PATH = "Path"
+    WALL = "Wall"
+    START = "Start"
+    DESTINATION = "Destination"
+    EXPLORED = "Explored"
+    OPTIMAL_PATH = "Optimal_Path"
 
 # colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-RED = (255, 58, 43)
-BLUE = (65, 59, 209)
-GREY = (203, 203, 203)
+class Color:
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    RED = (255, 58, 43)
+    BLUE = (65, 59, 209)
+    GREY = (203, 203, 203)
+    PURPLE = (150, 93, 197)

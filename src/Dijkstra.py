@@ -1,38 +1,45 @@
 import pygame
+import heapq
 import logging
-from queue import Queue
+from queue import PriorityQueue
 
 from Window import Window
 from Grid import *
 from constants import *
 
 
-def BreadthFirstSearch(grid: Grid, window: Window) -> None:
+def Dijkstra(grid: Grid, window: Window) -> None:
     start = (grid[grid.rowStart][grid.columnStart].cost, grid.rowStart, grid.columnStart)
     destination = (grid[grid.rowDestination][grid.columnDestination].cost, grid.rowDestination, grid.columnDestination)
     
-    frontier = Queue()
-    frontier.put(start)
+    frontier = PriorityQueue()
+    frontier.put(start, 0)
     came_from = dict()
+    cost_so_far = dict()
     came_from[start] = None
+    cost_so_far[start] = 0
         
     while not frontier.empty():
         if not window.paused:
             current = frontier.get()
+            
             for nextNode in grid.getNeighbors(current):
+                new_cost = cost_so_far[current] + grid.getDistance(current, nextNode)
+                
                 if nextNode == destination:
                     # traceback to start
                     while current != start:
                         grid[current[1]][current[2]].setState(NodeState.OPTIMAL_PATH)
                         current = came_from[current]
-                        
                     return None
                 
                 if grid[nextNode[1]][nextNode[2]].color == Color.BLACK:
                     continue
                 
-                if nextNode not in came_from:
-                    frontier.put(nextNode)
+                if not nextNode in cost_so_far or new_cost < cost_so_far[nextNode]:
+                    cost_so_far[nextNode] = new_cost
+                    priority = new_cost
+                    frontier.put(nextNode, priority)
                     came_from[nextNode] = current
                     grid[nextNode[1]][nextNode[2]].setState(NodeState.EXPLORED)
 

@@ -6,15 +6,11 @@ import logging
 import sys
 import subprocess
 import pkg_resources
-import profile
+# import profile
 
 import SceneManager
 from GUIControl import GUIControl
 from constants import *
-
-
-# TODO: Until the middle mouse button is released, walls affected by starting points/destinations will
-#       revert back to walls.
 
 
 pygame.init()
@@ -36,34 +32,43 @@ class Window():
         self.paused: bool = False
         self.begin: float = None
         self.deltaTime: float = None
+        self.totalTimePerSec: float = 0.0
+        self.windowFPS: int = 0
         
         # Scene Manager
         self.sceneManager = SceneManager.SceneManager(window=self)
 
     def showFPS(self):
-        pygame.display.set_caption(f"Pathfinder - FPS: {1/self.deltaTime}")
+        if self.deltaTime != 0: pygame.display.set_caption(f"Pathfinder - FPS: {self.windowFPS}")
 
+    def calculateDeltaTime(self):
+        self.deltaTime = time.time() - self.begin
+        self.begin = time.time()
+        self.calculateAndShowFPS()
+        
+    def calculateAndShowFPS(self):
+        self.totalTimePerSec += self.deltaTime
+        if self.totalTimePerSec >= 1.0:
+            self.showFPS()
+            self.totalTimePerSec = 0
+            self.windowFPS = 0
+        else:
+            self.windowFPS += 1
+        
     def Loop(self):
         self.deltaTime = 0.0
         self.begin = 0.0
         
         while self.running:
-            self.EventSequence()
-
-    def EventSequence(self):
-        self.deltaTime = time.time() - self.begin
-        self.begin = time.time()
-        
-        self.sceneManager.PollInput()
-        
-        self.sceneManager.Render()
-        
-        # self.gui.mainloop()
-        pygame.display.update()
-        self.clock.tick(FPS)
-
-        self.showFPS()
-
+            self.calculateDeltaTime()
+            
+            self.sceneManager.PollInput()
+            
+            self.sceneManager.Render()
+            
+            # self.gui.mainloop()
+            pygame.display.update()
+            # self.clock.tick(FPS)
     
 def checkDependencies() -> None:
     required = { "pygame", "pillow" }

@@ -11,7 +11,7 @@ class TextBox(pygame.Surface):
         self.pos = pos
 
         self.my_font: pygame.font.Font = pygame.font.SysFont("Bahnschrift", size)
-        self.text_surface = self.my_font.render(string, True, WHITE)
+        self.text_surface = self.my_font.render(string, True, Color.WHITE)
         self.text_surface.set_alpha(255)
 
         self.text_box = self.text_surface.get_rect(topleft=pos)
@@ -23,4 +23,4 @@ class TextBox(pygame.Surface):
         self.pos = newPos
 
     def setText(self, text: str):
-        self.text_surface = self.my_font.render(text, True, WHITE)
+        self.text_surface = self.my_font.render(text, True, Color.WHITE)

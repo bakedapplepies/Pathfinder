@@ -5,6 +5,7 @@ from Window import Window
 from AbstractScene import AbstractScene
 from Grid import Grid
 from BFS import BreadthFirstSearch
+from Dijkstra import Dijkstra
 from constants import *
 
 
@@ -31,34 +32,33 @@ class Pathfinder(AbstractScene):
                 keydown = True
             if pygame.mouse.get_pressed()[2]:
                 mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.Path, self.grid, mouse_pos)
+                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.PATH, self.grid, mouse_pos)
             elif pygame.mouse.get_pressed()[0]:
                 # print(pygame.mouse.get_pressed())
                 mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.Wall, self.grid, mouse_pos)
+                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.WALL, self.grid, mouse_pos)
             elif pygame.mouse.get_pressed()[1]:
                 if not pygame.key.get_pressed()[pygame.K_LCTRL]:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.Start, self.grid, mouse_pos)
+                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.START, self.grid, mouse_pos)
                 else:
                     mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.Destination, self.grid, mouse_pos)
+                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.DESTINATION, self.grid, mouse_pos)
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_b] and keydown and self.grid.rowStart != None and self.grid.rowDestination != None:
-            print("Started BFS.")
-            BreadthFirstSearch(self.grid, self.window)
+            print("Started Pathfinding.")
+            # BreadthFirstSearch(self.grid, self.window)
+            Dijkstra(self.grid, self.window)
         elif keys[pygame.K_ESCAPE] and keydown:  # Menu
             self.window.paused = True
-            self.window.sceneManager.switchScene(Scenes.Menu)
+            self.window.sceneManager.switchScene(Scenes.MENU)
         elif keys[pygame.K_g] and keydown:  # New Grid
             self.grid = Grid(RESOLUTION)
 
     # RENDERING
     def Render(self):
-        # if self.window.paused == False:
-        #     if self.window.sceneManager.menu.BFS_delay == "On":
-        self.pygame_window.fill(WHITE)
+        self.pygame_window.fill(Color.WHITE)
         self.DrawGrid()
         
     def DrawGrid(self):

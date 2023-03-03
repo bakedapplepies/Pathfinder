@@ -9,13 +9,13 @@ from constants import *
 
 class SceneManager(AbstractScene):
     def __init__(self, window: Window):
-        self.scene = Scenes.Pathfinder
+        self.scene = Scenes.PATHFINDER
         self.pathfinder = Pathfinder(window=window)
         self.menu = Menu(window=window)
         
         self.scenes = {
-            Scenes.Pathfinder: self.pathfinder,
-            Scenes.Menu: self.menu,
+            Scenes.PATHFINDER: self.pathfinder,
+            Scenes.MENU: self.menu,
         }
         
     def switchScene(self, sceneName: str) -> None:

@@ -18,12 +18,16 @@ class Menu(AbstractScene):
         
         self.transparent_background = pygame.Surface(RESOLUTION)
         self.transparent_background.set_alpha(190)
-        self.transparent_background.fill(GREY)
+        self.transparent_background.fill(Color.GREY)
         
         # widgets
         self.settings_label = TextBox(self.window, "Settings", 96, (RESOLUTION[0]/10, RESOLUTION[1]/6))
+        
         self.BFS_delay: str = "Off"
         self.BFS_delay_label = TextBox(self.window, f"Enable BFS delay: {self.BFS_delay}", 36, (self.settings_label.pos[0] + 10, self.settings_label.pos[1] + 110))
+    
+        self.mouse_mode = "Trackpad"
+        self.mouse_mode_label = TextBox(self.window, f"Mouse mode: {self.mouse_mode}", 36, (self.settings_label.pos[0] + 10, self.BFS_delay_label.pos[1] + 60))
     
     # INPUTS
     def PollInput(self):
@@ -44,13 +48,15 @@ class Menu(AbstractScene):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE] and keydown:
             self.window.paused = False
-            self.window.sceneManager.switchScene(Scenes.Pathfinder)
+            self.window.sceneManager.pathfinder.Render()
+            self.window.sceneManager.switchScene(Scenes.PATHFINDER)
     
     # RENDERING
     def Render(self):
         self.window.sceneManager.pathfinder.DrawGrid()
         self.pygame_window.blit(self.transparent_background, (0, 0))
-        # self.pygame_window.blit(self.BFS_delay_label, self.BFS_delay_label.pos)
+        
         self.settings_label.Render()
         self.BFS_delay_label.Render()
+        self.mouse_mode_label.Render()
     
