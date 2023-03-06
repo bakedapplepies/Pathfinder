@@ -10,6 +10,7 @@ class Scenes:
 # node states
 class NodeState:
     PATH = "Path"
+    OBSTACLE = "Obstacle"
     WALL = "Wall"
     START = "Start"
     DESTINATION = "Destination"
@@ -20,6 +21,7 @@ class NodeState:
 class Color:
     BLACK = (0, 0, 0)
     WHITE = (255, 255, 255)
+    PASTEL_LIME = (207, 255, 136)
     RED = (255, 58, 43)
     BLUE = (65, 59, 209)
     GREY = (203, 203, 203)

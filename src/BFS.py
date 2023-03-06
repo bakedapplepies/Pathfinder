@@ -40,7 +40,7 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
         window.calculateDeltaTime()
         
         window.sceneManager.PollInput()
-        if window.sceneManager.menu.BFS_delay == "On" and window.sceneManager.scene == Scenes.PATHFINDER:
+        if window.sceneManager.menu.delay == "On" and window.sceneManager.scene == Scenes.PATHFINDER:
             window.sceneManager.Render()
         elif window.sceneManager.scene == Scenes.MENU:
             window.sceneManager.menu.Render()

@@ -25,34 +25,67 @@ class Pathfinder(AbstractScene):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+                
             if event.type == pygame.VIDEORESIZE:
                 # self.window = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                 self.grid = Grid((event.w, event.h))
+                
             if event.type == pygame.KEYDOWN:
                 keydown = True
-            if pygame.mouse.get_pressed()[2]:
-                mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.PATH, self.grid, mouse_pos)
-            elif pygame.mouse.get_pressed()[0]:
-                # print(pygame.mouse.get_pressed())
-                mouse_pos = pygame.mouse.get_pos()
-                self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.WALL, self.grid, mouse_pos)
-            elif pygame.mouse.get_pressed()[1]:
-                if not pygame.key.get_pressed()[pygame.K_LCTRL]:
-                    mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.START, self.grid, mouse_pos)
-                else:
-                    mouse_pos = pygame.mouse.get_pos()
-                    self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.DESTINATION, self.grid, mouse_pos)
+                
+            mouse_clicks = pygame.mouse.get_pressed()
+            if mouse_clicks:
+                if self.window.sceneManager.menu.mouse_mode == "Mouse":
+                    if pygame.mouse.get_pressed()[2]:
+                        mouse_pos = pygame.mouse.get_pos()
+                        self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.PATH, self.grid, mouse_pos)
+                    
+                    elif pygame.mouse.get_pressed()[0]:
+                        if not pygame.key.get_pressed()[pygame.K_LCTRL]:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.WALL, self.grid, mouse_pos)
+                        else:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.OBSTACLE, self.grid, mouse_pos)
+                    
+                    elif pygame.mouse.get_pressed()[1]:
+                        if not pygame.key.get_pressed()[pygame.K_LCTRL]:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.START, self.grid, mouse_pos)
+                        else:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.DESTINATION, self.grid, mouse_pos)
+                
+                elif self.window.sceneManager.menu.mouse_mode == "Trackpad":
+                    # no walls
+                    if pygame.mouse.get_pressed()[2]:
+                        mouse_pos = pygame.mouse.get_pos()
+                        self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.PATH, self.grid, mouse_pos)
+                    
+                    elif pygame.mouse.get_pressed()[0]:
+                        pressed_keys = pygame.key.get_pressed()
+                        if pressed_keys[pygame.K_1]:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.OBSTACLE, self.grid, mouse_pos)
+                        elif not pygame.key.get_pressed()[pygame.K_LCTRL]:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.START, self.grid, mouse_pos)
+                        else:
+                            mouse_pos = pygame.mouse.get_pos()
+                            self.grid[min(int(mouse_pos[1]/self.grid.sideLength), len(self.grid)-1)][min(int(mouse_pos[0]/self.grid.sideLength), len(self.grid[0])-1)].setState(NodeState.DESTINATION, self.grid, mouse_pos)
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_b] and keydown and self.grid.rowStart != None and self.grid.rowDestination != None:
             print("Started Pathfinding.")
-            # BreadthFirstSearch(self.grid, self.window)
-            Dijkstra(self.grid, self.window)
+            if self.window.sceneManager.menu.algorithm == "BFS":
+                BreadthFirstSearch(self.grid, self.window)
+            elif self.window.sceneManager.menu.algorithm == "Dijkstra":
+                Dijkstra(self.grid, self.window)
+                
         elif keys[pygame.K_ESCAPE] and keydown:  # Menu
             self.window.paused = True
             self.window.sceneManager.switchScene(Scenes.MENU)
+            
         elif keys[pygame.K_g] and keydown:  # New Grid
             self.grid = Grid(RESOLUTION)
 

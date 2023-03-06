@@ -45,7 +45,7 @@ class Grid(list):
         )
         
     def getDistance(self, node1: tuple, node2: tuple):
-        return abs(node1[1] - node2[1]) + abs(node1[2] + node2[2])
+        return (abs(node1[1] - node2[1]) + abs(node1[2] - node2[2])) * self[node2[1]][node2[2]].cost
                 
     def setStartNode(self, x: int, y: int) -> None:
         row = int(y / self.sideLength)

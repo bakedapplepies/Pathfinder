@@ -19,6 +19,10 @@ class Node(pygame.Rect):
         elif state == NodeState.WALL and not (self.color == Color.RED or self.color == Color.BLUE):
             self.color = Color.BLACK
             
+        elif state == NodeState.OBSTACLE:
+            self.color = Color.PASTEL_LIME
+            self.cost = 5
+            
         elif state == NodeState.START:
             self.color = Color.RED
             self.cost = 0
@@ -30,7 +34,7 @@ class Node(pygame.Rect):
             grid.setDestinationNode(pos[0], pos[1])
             
         elif state == NodeState.EXPLORED:
-            self.color = Color.GREY
+            self.color = tuple(i*0.82 for i in self.color)
             
         elif state == NodeState.OPTIMAL_PATH:
             self.color = Color.PURPLE
