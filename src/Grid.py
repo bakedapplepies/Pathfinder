@@ -1,5 +1,3 @@
-import pygame
-
 from Node import Node
 from constants import *
 
@@ -19,47 +17,39 @@ class Grid(list):
                 super().__getitem__(int(i/self.sideLength)).append(Node(j, i, self.sideLength, self.sideLength))
                 
     def getNeighbors(self, nodePos: tuple) -> tuple:
-        row = nodePos[1]
-        col = nodePos[2]
+        row = nodePos[0]
+        col = nodePos[1]
         return (
             (
-                self[max(row - 1, 0)][col].cost,
                 max(row - 1, 0),
                 col
             ),
             (
-                self[row][min(col + 1, len(self[0]) - 1)].cost,
                 row,
                 min(col + 1, len(self[0]) - 1)
             ),
             (
-                self[min(row + 1, len(self) - 1)][col].cost,
                 min(row + 1, len(self) - 1),
                 col
             ),
             (
-                self[row][max(col - 1, 0)].cost,
                 row,
                 max(col - 1, 0)
             )
         )
         
     def getDistance(self, node1: tuple, node2: tuple):
-        return (abs(node1[1] - node2[1]) + abs(node1[2] - node2[2])) * self[node2[1]][node2[2]].cost
+        return (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1])) * self[node2[0]][node2[1]].cost
                 
-    def setStartNode(self, x: int, y: int) -> None:
-        row = int(y / self.sideLength)
-        column = int(x / self.sideLength)
-        if self.rowStart != None and (row != self.rowStart or column != self.columnStart) and (row < len(self) and column < len(self[0])):
+    def setStartNode(self, row: int, col: int) -> None:
+        if self.rowStart != None and (row != self.rowStart or col != self.columnStart) and (row < len(self) and col < len(self[0])):
             self[self.rowStart][self.columnStart].setState(NodeState.PATH)
         self.rowStart = row
-        self.columnStart = column
+        self.columnStart = col
     
-    def setDestinationNode(self, x: int, y: int) -> None:
-        row = int(y / self.sideLength)
-        column = int(x / self.sideLength)
-        if self.rowDestination != None and (row != self.rowDestination or column != self.columnDestination) and (row < len(self) and column < len(self[0])):
+    def setDestinationNode(self, row: int, col: int) -> None:
+        if self.rowDestination != None and (row != self.rowDestination or col != self.columnDestination) and (row < len(self) and col < len(self[0])):
             self[self.rowDestination][self.columnDestination].setState(NodeState.PATH)
         self.rowDestination = row
-        self.columnDestination = column
-            
+        self.columnDestination = col
+    

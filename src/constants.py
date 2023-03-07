@@ -15,7 +15,13 @@ class NodeState:
     START = "Start"
     DESTINATION = "Destination"
     EXPLORED = "Explored"
-    OPTIMAL_PATH = "Optimal_Path"
+    OPTIMAL_PATH = "Optimal Path"
+    
+# algorithms
+class Algorithms:
+    BFS = "BFS"
+    DIJKSTRA = "Dijkstra"
+    GREEDY_BFS = "Greedy BFS"
 
 # colors
 class Color:

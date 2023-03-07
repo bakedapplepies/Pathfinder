@@ -1,39 +1,40 @@
 import pygame
+import heapq
 import logging
-from queue import Queue
+from queue import PriorityQueue
 
 from Window import Window
 from Grid import *
 from constants import *
 
 
-def BreadthFirstSearch(grid: Grid, window: Window) -> None:
+def GreedyBFS(grid: Grid, window: Window) -> None:
     start = (grid.rowStart, grid.columnStart)
     destination = (grid.rowDestination, grid.columnDestination)
-    print(id(grid))
     
-    frontier = Queue()
-    frontier.put(start)
+    frontier = PriorityQueue()
+    frontier.put((0, start))
     came_from = dict()
     came_from[start] = None
         
     while not frontier.empty():
         if not window.paused:
-            current = frontier.get()
-            for nextNode in grid.getNeighbors(current):
+            current = frontier.get()[1]  # only get the node, not the priority
+            
+            for nextNode in grid.getNeighbors(current):                
+                # traceback to start
                 if nextNode == destination:
-                    # traceback to start
                     while current != start:
                         grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH)
                         current = came_from[current]
-                        
                     return None
                 
                 if grid[nextNode[0]][nextNode[1]].color == Color.BLACK:
                     continue
                 
                 if nextNode not in came_from:
-                    frontier.put(nextNode)
+                    priority = grid.getDistance(nextNode, destination)
+                    frontier.put((priority, nextNode))
                     came_from[nextNode] = current
                     grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
 

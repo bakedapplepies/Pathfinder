@@ -25,13 +25,13 @@ class Node(pygame.Rect):
             
         elif state == NodeState.START:
             self.color = Color.RED
-            self.cost = 0
-            grid.setStartNode(pos[0], pos[1])
+            grid.setStartNode(row=pos[0], col=pos[1])
+            self.cost = 1
             
         elif state == NodeState.DESTINATION:
             self.color = Color.BLUE
-            self.cost = 0
-            grid.setDestinationNode(pos[0], pos[1])
+            grid.setDestinationNode(row=pos[0], col=pos[1])
+            self.cost = 1
             
         elif state == NodeState.EXPLORED:
             self.color = tuple(i*0.82 for i in self.color)

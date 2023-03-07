@@ -9,8 +9,8 @@ from constants import *
 
 
 def Dijkstra(grid: Grid, window: Window) -> None:
-    start = (grid[grid.rowStart][grid.columnStart].cost, grid.rowStart, grid.columnStart)
-    destination = (grid[grid.rowDestination][grid.columnDestination].cost, grid.rowDestination, grid.columnDestination)
+    start = (grid.rowStart, grid.columnStart)
+    destination = (grid.rowDestination, grid.columnDestination)
     
     frontier = PriorityQueue()
     frontier.put((0, start))
@@ -29,20 +29,19 @@ def Dijkstra(grid: Grid, window: Window) -> None:
                 if nextNode == destination:
                     # traceback to start
                     while current != start:
-                        grid[current[1]][current[2]].setState(NodeState.OPTIMAL_PATH)
+                        grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH)
                         current = came_from[current]
                     return None
                 
-                if grid[nextNode[1]][nextNode[2]].color == Color.BLACK:
+                if grid[nextNode[0]][nextNode[1]].color == Color.BLACK:
                     continue
                 
                 if nextNode not in cost_so_far or new_cost < cost_so_far[nextNode]:
                     cost_so_far[nextNode] = new_cost
-                    print(new_cost)
                     priority = new_cost
                     frontier.put((priority, nextNode))
                     came_from[nextNode] = current
-                    grid[nextNode[1]][nextNode[2]].setState(NodeState.EXPLORED)
+                    grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
 
         # keeping the window alive
         window.calculateDeltaTime()

@@ -50,6 +50,7 @@ class Menu(AbstractScene):
                 pygame.quit()
                 sys.exit()
                 
+            # delay label
             elif event.type == pygame.MOUSEBUTTONDOWN and self.delay_label.text_box.collidepoint(pygame.mouse.get_pos()):  # get Rect
                 if self.delay == "On":
                     self.delay = "Off"
@@ -59,6 +60,7 @@ class Menu(AbstractScene):
                     self.settingsData["delay"] = "On"
                 self.delay_label.setText(f"Enable delay: {self.delay}")
                 
+            # mouse mode label 
             elif event.type == pygame.MOUSEBUTTONDOWN and self.mouse_mode_label.text_box.collidepoint(pygame.mouse.get_pos()):
                 if self.mouse_mode == "Trackpad":
                     self.mouse_mode = "Mouse"
@@ -68,13 +70,17 @@ class Menu(AbstractScene):
                     self.settingsData["mouse_mode"] = self.mouse_mode
                 self.mouse_mode_label.setText(f"Mouse mode: {self.mouse_mode}")
             
+            # algorithm label
             elif event.type == pygame.MOUSEBUTTONDOWN and self.algorithm_label.text_box.collidepoint(pygame.mouse.get_pos()):
-                if self.algorithm == "BFS":
-                    self.algorithm = "Dijkstra"
-                    self.settingsData["algorithm"] = "Dijkstra"
-                elif self.algorithm == "Dijkstra":
-                    self.algorithm = "BFS"
-                    self.settingsData["algorithm"] = "BFS"
+                if self.algorithm == Algorithms.BFS:
+                    self.algorithm = Algorithms.DIJKSTRA
+                    self.settingsData["algorithm"] = Algorithms.DIJKSTRA
+                elif self.algorithm == Algorithms.DIJKSTRA:
+                    self.algorithm = Algorithms.GREEDY_BFS
+                    self.settingsData["algorithm"] = Algorithms.GREEDY_BFS
+                elif self.algorithm == Algorithms.GREEDY_BFS:
+                    self.algorithm = Algorithms.BFS
+                    self.settingsData["algorithm"] = Algorithms.BFS
                 self.algorithm_label.setText(f"Algorithm: {self.algorithm}")
             
             elif event.type == pygame.KEYDOWN:
@@ -91,6 +97,7 @@ class Menu(AbstractScene):
         self.window.sceneManager.pathfinder.DrawGrid()
         self.pygame_window.blit(self.transparent_background, (0, 0))
         
+        # render text
         self.settings_label.Render()
         self.delay_label.Render()
         self.mouse_mode_label.Render()

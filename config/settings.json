@@ -1,5 +1,5 @@
 {
-    "algorithm": "Dijkstra",
-    "mouse_mode": "Trackpad",
+    "algorithm": "BFS",
+    "mouse_mode": "Mouse",
     "delay": "On"
 }
