@@ -10,7 +10,6 @@ from constants import *
 def BreadthFirstSearch(grid: Grid, window: Window) -> None:
     start = (grid.rowStart, grid.columnStart)
     destination = (grid.rowDestination, grid.columnDestination)
-    print(id(grid))
     
     frontier = Queue()
     frontier.put(start)

@@ -1,5 +1,6 @@
 import pygame
 import sys
+import copy
 
 from Window import Window
 from AbstractScene import AbstractScene
@@ -19,9 +20,6 @@ class Pathfinder(AbstractScene):
         
         # Grid
         self.grid = Grid(RESOLUTION)
-        self.saved_grid = Grid(RESOLUTION)
-        
-        print(id(self.grid))
 
     # INPUTS
     def PollInput(self):
@@ -47,49 +45,38 @@ class Pathfinder(AbstractScene):
                 grid_pos = (row, col)
                 
                 node: Node = self.grid[row][col]
-                saved_node: Node = self.saved_grid[row][col]
                 
                 if self.window.sceneManager.menu.mouse_mode == "Mouse":
                     if pygame.mouse.get_pressed()[2]:
                         node.setState(NodeState.PATH, self.grid, grid_pos)
-                        saved_node.setState(NodeState.PATH, self.grid, grid_pos)
                     
                     elif pygame.mouse.get_pressed()[0]:
                         if not pygame.key.get_pressed()[pygame.K_LCTRL]:
                             node.setState(NodeState.WALL, self.grid, grid_pos)
-                            saved_node.setState(NodeState.WALL, self.grid, grid_pos)
                         else:
                             node.setState(NodeState.OBSTACLE, self.grid, grid_pos)
-                            saved_node.setState(NodeState.OBSTACLE, self.grid, grid_pos)
                     
                     elif pygame.mouse.get_pressed()[1]:
                         if not pygame.key.get_pressed()[pygame.K_LCTRL]:
                             node.setState(NodeState.START, self.grid, grid_pos)
-                            saved_node.setState(NodeState.START, self.grid, grid_pos)
                         else:
                             node.setState(NodeState.DESTINATION, self.grid, grid_pos)
-                            saved_node.setState(NodeState.DESTINATION, self.grid, grid_pos)
                 
                 elif self.window.sceneManager.menu.mouse_mode == "Trackpad":
                     if pygame.mouse.get_pressed()[2]:
                         node.setState(NodeState.PATH, self.grid, grid_pos)
-                        saved_node.setState(NodeState.PATH, self.grid, grid_pos)
                     
                     elif pygame.mouse.get_pressed()[0]:
                         pressed_keys = pygame.key.get_pressed()
                         
                         if pressed_keys[pygame.K_1]:
                             node.setState(NodeState.OBSTACLE, self.grid, grid_pos)
-                            saved_node.setState(NodeState.OBSTACLE, self.grid, grid_pos)
                         elif pressed_keys[pygame.K_w]:
                             node.setState(NodeState.WALL, self.grid, grid_pos)
-                            saved_node.setState(NodeState.WALL, self.grid, grid_pos)
                         elif not pygame.key.get_pressed()[pygame.K_LCTRL]:
                             node.setState(NodeState.START, self.grid, grid_pos)
-                            saved_node.setState(NodeState.START, self.grid, grid_pos)
                         else:
                             node.setState(NodeState.DESTINATION, self.grid, grid_pos)
-                            saved_node.setState(NodeState.DESTINATION, self.grid, grid_pos)
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_b] and keydown and self.grid.rowStart != None and self.grid.rowDestination != None:
@@ -117,10 +104,10 @@ class Pathfinder(AbstractScene):
     def DrawGrid(self):
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
-                pygame.draw.rect(self.pygame_window, self.grid[i][j].color, self.grid[i][j])
-                pygame.draw.rect(self.pygame_window, self.grid[i][j].border_color, self.grid[i][j], 1)
+                pygame.draw.rect(self.pygame_window, self.grid[i][j].color, self.grid[i][j], 0, 2)
+                pygame.draw.rect(self.pygame_window, self.grid[i][j].border_color, self.grid[i][j], 1, 2)
                 
     def resetExploredNodes(self):
         for i in range(len(self.grid)):
             for j in range(len(self.grid[0])):
-                self.grid[i][j] = self.saved_grid[i][j]
+                self.grid[i][j].color = self.grid.colorGrid[i][j]

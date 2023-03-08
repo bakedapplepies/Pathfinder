@@ -33,7 +33,7 @@ def GreedyBFS(grid: Grid, window: Window) -> None:
                     continue
                 
                 if nextNode not in came_from:
-                    priority = grid.getDistance(nextNode, destination)
+                    priority = grid.getDistance(destination, nextNode)
                     frontier.put((priority, nextNode))
                     came_from[nextNode] = current
                     grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
