@@ -49,13 +49,12 @@ class Window(pygame.Surface):
         self.calculateAndShowFPS()
         
     def calculateAndShowFPS(self):
+        self.windowFPS += 1
         self.totalTimePerSec += self.deltaTime
         if self.totalTimePerSec >= 1.0:
             self.showFPS()
             self.totalTimePerSec = 0
             self.windowFPS = 0
-        else:
-            self.windowFPS += 1
         
     def Loop(self):
         self.deltaTime = 0.0

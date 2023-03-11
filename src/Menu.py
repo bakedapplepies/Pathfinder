@@ -37,7 +37,7 @@ class Menu(AbstractScene):
         self.algorithm: str = self.settingsData["algorithm"]
         self.algorithm_label = TextBox(self.window, f"Algorithm: {self.algorithm}", 36, (self.delay_label.pos[0], self.mouse_mode_label.pos[1] + 60))
     
-    def __del__(self):
+    def saveSettings(self):
         # rewrite to json
         with open("config/settings.json", "w") as datafile:
             json.dump(self.settingsData, datafile, indent=4)
@@ -48,6 +48,7 @@ class Menu(AbstractScene):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.window.saveloadManager.save("ColorGrid", self.window.sceneManager.pathfinder.grid.colorGrid)
+                self.saveSettings()
                 pygame.quit()
                 sys.exit()
                 

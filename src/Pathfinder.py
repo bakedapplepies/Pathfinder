@@ -30,6 +30,7 @@ class Pathfinder(AbstractScene):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.window.saveloadManager.save("ColorGrid", self.grid.colorGrid)
+                self.window.sceneManager.menu.saveSettings()
                 pygame.quit()
                 sys.exit()
                 

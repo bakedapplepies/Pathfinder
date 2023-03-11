@@ -1,5 +1,5 @@
 {
-    "algorithm": "Greedy BFS",
+    "algorithm": "A*",
     "mouse_mode": "Trackpad",
     "delay": "On"
 }
