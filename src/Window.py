@@ -4,15 +4,12 @@ import ctypes
 import sys
 import subprocess
 import pkg_resources
-import pickle
 # import profile
 
 import SceneManager
 from SaveLoadManager import SaveLoadManager
 from constants import *
 
-
-pygame.init()
 
 class Window(pygame.Surface):
     def __init__(self):
@@ -22,7 +19,7 @@ class Window(pygame.Surface):
         pygame.display.set_caption("Pathfinder")
         self.pygame_window: pygame.Surface = pygame.display.set_mode(RESOLUTION, pygame.RESIZABLE)
 
-        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("abc")
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("pathfinder.johnbach")
         icon = pygame.image.load("resources/icons/32_pathfinder_icon.png").convert()
         pygame.display.set_icon(icon)
         
@@ -42,19 +39,6 @@ class Window(pygame.Surface):
         # Scene Manager
         self.sceneManager = SceneManager.SceneManager(window=self)
         self.sceneManager.pathfinder.resetExploredNodes()
-        
-    # def __del__(self):
-    #     # save state of game
-    #     with open("SaveFile.dat", "wb") as file:
-    #         pickle.dump(self.__getstate__(), file)
-            
-    # def __getstate__(self):
-    #     print(self.__dict__.copy())
-    #     return self.__dict__.copy()
-    
-    # def __setstate__(self, d):
-    #     print("ih")
-    #     self.__dict__.update(d)
 
     def showFPS(self):
         if self.deltaTime != 0: pygame.display.set_caption(f"Pathfinder - FPS: {self.windowFPS}")
@@ -101,6 +85,7 @@ def checkDependencies() -> None:
 
 if __name__ == "__main__":
     # checkDependencies()
+    pygame.init()
     
     window = Window()
     window.Loop()

@@ -1,5 +1,4 @@
 import pygame
-import logging
 from queue import Queue
 
 from Window import Window

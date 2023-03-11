@@ -1,6 +1,4 @@
 import pygame
-import heapq
-import logging
 from queue import PriorityQueue
 
 from Window import Window

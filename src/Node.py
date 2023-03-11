@@ -1,6 +1,5 @@
 import pygame
 
-import Grid
 from constants import *
 
 

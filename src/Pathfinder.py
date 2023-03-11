@@ -1,6 +1,5 @@
 import pygame
 import sys
-import copy
 
 from Window import Window
 from AbstractScene import AbstractScene
