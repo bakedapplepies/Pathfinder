@@ -4,3 +4,6 @@ venv
 *.aseprite
 icon.ico
 save_data
+*.spec
+build
+dist
