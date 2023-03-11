@@ -21,27 +21,45 @@ def Dijkstra(grid: Grid, window: Window) -> None:
         
     while not frontier.empty():
         if not window.paused:
-            current = frontier.get()[1]  # only get the node, not the priority
-            
-            for nextNode in grid.getNeighbors(current):
-                new_cost = cost_so_far[current] + grid.getDistance(current, nextNode)
+            if window.sceneManager.pathfinder.forcePrintFrontier:
+                current = frontier.get()
+                grid[current[1][0]][current[1][1]].setState(NodeState.EXPLORED)
+                if frontier.empty():
+                    break
                 
-                if nextNode == destination:
-                    # traceback to start
-                    while current != start:
-                        grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH)
-                        current = came_from[current]
-                    return None
+            else:
+                current = frontier.get()[1]  # only get the node, not the priority
                 
-                if grid[nextNode[0]][nextNode[1]].color == Color.BLACK:
-                    continue
-                
-                if nextNode not in cost_so_far or new_cost < cost_so_far[nextNode]:
-                    cost_so_far[nextNode] = new_cost
-                    priority = new_cost
-                    frontier.put((priority, nextNode))
-                    came_from[nextNode] = current
-                    grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
+                for nextNode in grid.getNeighbors(current):
+                    new_cost = cost_so_far[current] + grid.getDistance(current, nextNode)
+                    
+                    if nextNode == destination:
+                        # traceback to start
+                        while current != start:
+                            grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH)
+                            current = came_from[current]
+                            
+                            # keeping the window alive
+                            window.calculateDeltaTime()
+                            
+                            window.sceneManager.PollInput()
+                            if window.sceneManager.menu.delay == "On" and window.sceneManager.scene == Scenes.PATHFINDER:
+                                window.sceneManager.Render()
+                            elif window.sceneManager.scene == Scenes.MENU:
+                                window.sceneManager.Render()
+                            pygame.display.update()
+                            
+                        return None
+                    
+                    if grid[nextNode[0]][nextNode[1]].color == Color.BLACK:
+                        continue
+                    
+                    if nextNode not in cost_so_far or new_cost < cost_so_far[nextNode]:
+                        cost_so_far[nextNode] = new_cost
+                        priority = new_cost
+                        frontier.put((priority, nextNode))
+                        came_from[nextNode] = current
+                        grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
 
         # keeping the window alive
         window.calculateDeltaTime()
@@ -50,5 +68,5 @@ def Dijkstra(grid: Grid, window: Window) -> None:
         if window.sceneManager.menu.delay == "On" and window.sceneManager.scene == Scenes.PATHFINDER:
             window.sceneManager.Render()
         elif window.sceneManager.scene == Scenes.MENU:
-            window.sceneManager.menu.Render()
+            window.sceneManager.Render()
         pygame.display.update()

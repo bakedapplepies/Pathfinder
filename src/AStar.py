@@ -1,20 +1,23 @@
 import pygame
+import heapq
 import logging
-from queue import Queue
+from queue import PriorityQueue
 
 from Window import Window
 from Grid import *
 from constants import *
 
 
-def BreadthFirstSearch(grid: Grid, window: Window) -> None:
+def AStar(grid: Grid, window: Window) -> None:
     start = (grid.rowStart, grid.columnStart)
     destination = (grid.rowDestination, grid.columnDestination)
     
-    frontier = Queue()
-    frontier.put(start)
+    frontier = PriorityQueue()
+    frontier.put((0, start))
     came_from = dict()
+    cost_so_far = dict()
     came_from[start] = None
+    cost_so_far[start] = 0
         
     while not frontier.empty():
         if not window.paused:
@@ -23,12 +26,13 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
                 grid[current[1][0]][current[1][1]].setState(NodeState.EXPLORED)
                 if frontier.empty():
                     break
-            
+                
             else:
-                current = frontier.get()
-                for nextNode in grid.getNeighbors(current):
+                current = frontier.get()[1]  # only get the node, not the priority
+                
+                for nextNode in grid.getNeighbors(current):                
+                    # traceback to start
                     if nextNode == destination:
-                        # traceback to start
                         while current != start:
                             grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH)
                             current = came_from[current]
@@ -48,8 +52,11 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
                     if grid[nextNode[0]][nextNode[1]].color == Color.BLACK:
                         continue
                     
-                    if nextNode not in came_from:
-                        frontier.put(nextNode)
+                    new_cost = cost_so_far[current] + grid.getDistance(current, nextNode)
+                    if nextNode not in cost_so_far or new_cost < cost_so_far[nextNode]:
+                        cost_so_far[nextNode] = new_cost
+                        priority = new_cost + grid.getDistance(destination, nextNode)
+                        frontier.put((priority, nextNode))
                         came_from[nextNode] = current
                         grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
 

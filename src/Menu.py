@@ -47,6 +47,7 @@ class Menu(AbstractScene):
         keydown = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self.window.saveloadManager.save("ColorGrid", self.window.sceneManager.pathfinder.grid.colorGrid)
                 pygame.quit()
                 sys.exit()
                 
@@ -79,6 +80,9 @@ class Menu(AbstractScene):
                     self.algorithm = Algorithms.GREEDY_BFS
                     self.settingsData["algorithm"] = Algorithms.GREEDY_BFS
                 elif self.algorithm == Algorithms.GREEDY_BFS:
+                    self.algorithm = Algorithms.ASTAR
+                    self.settingsData["algorithm"] = Algorithms.ASTAR
+                elif self.algorithm == Algorithms.ASTAR:
                     self.algorithm = Algorithms.BFS
                     self.settingsData["algorithm"] = Algorithms.BFS
                 self.algorithm_label.setText(f"Algorithm: {self.algorithm}")

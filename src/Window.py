@@ -1,23 +1,24 @@
 import pygame
 import time
 import ctypes
-import threading
-import logging
 import sys
 import subprocess
 import pkg_resources
+import pickle
 # import profile
 
 import SceneManager
-from GUIControl import GUIControl
+from SaveLoadManager import SaveLoadManager
 from constants import *
 
 
 pygame.init()
 
-class Window():
+class Window(pygame.Surface):
     def __init__(self):
         # Main window
+        pygame.Surface.__init__(self, RESOLUTION)
+        
         pygame.display.set_caption("Pathfinder")
         self.pygame_window: pygame.Surface = pygame.display.set_mode(RESOLUTION, pygame.RESIZABLE)
 
@@ -35,8 +36,25 @@ class Window():
         self.totalTimePerSec: float = 0.0
         self.windowFPS: int = 0
         
+        # State saving Manager
+        self.saveloadManager = SaveLoadManager(dir="save_data", extension=".dat")
+        
         # Scene Manager
         self.sceneManager = SceneManager.SceneManager(window=self)
+        self.sceneManager.pathfinder.resetExploredNodes()
+        
+    # def __del__(self):
+    #     # save state of game
+    #     with open("SaveFile.dat", "wb") as file:
+    #         pickle.dump(self.__getstate__(), file)
+            
+    # def __getstate__(self):
+    #     print(self.__dict__.copy())
+    #     return self.__dict__.copy()
+    
+    # def __setstate__(self, d):
+    #     print("ih")
+    #     self.__dict__.update(d)
 
     def showFPS(self):
         if self.deltaTime != 0: pygame.display.set_caption(f"Pathfinder - FPS: {self.windowFPS}")
@@ -67,6 +85,7 @@ class Window():
             self.sceneManager.Render()
             
             # self.gui.mainloop()
+            self.blit(self.pygame_window, (0, 0))
             pygame.display.update()
             # self.clock.tick(FPS)
     
@@ -78,32 +97,10 @@ def checkDependencies() -> None:
     if missing:
         python = sys.executable
         subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
-    
-def tkinter_thread_handler():
-    gui = GUIControl()
-    gui.mainloop()
-    
-def pathfinder_thread_handler():
-    Pathfinder = Window()
-    Pathfinder.Loop()
-
-def thread_handler():
-    try:
-        pathfinderThread = threading.Thread(target=pathfinder_thread_handler)
-        tkinterThread = threading.Thread(target=pathfinder_thread_handler)
-        
-        pathfinderThread.start()
-        tkinterThread.start()
-        
-        pathfinderThread.join()
-        tkinterThread.join()
-    except threading.ThreadError:
-        logging.exception("Threading Error")
 
 
 if __name__ == "__main__":
     # checkDependencies()
     
-    # thread_handler()
     window = Window()
     window.Loop()

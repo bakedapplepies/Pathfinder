@@ -22,6 +22,7 @@ class Algorithms:
     BFS = "BFS"
     DIJKSTRA = "Dijkstra"
     GREEDY_BFS = "Greedy BFS"
+    ASTAR = "A*"
 
 # colors
 class Color:
