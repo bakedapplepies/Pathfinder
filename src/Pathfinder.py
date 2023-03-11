@@ -1,7 +1,7 @@
 import pygame
 import sys
 
-from Window import Window
+from main import Window
 from AbstractScene import AbstractScene
 from Grid import Grid
 from Node import Node

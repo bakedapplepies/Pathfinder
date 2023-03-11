@@ -1,7 +1,7 @@
 import pygame
 
 from AbstractScene import AbstractScene
-from Window import Window
+from main import Window
 from Menu import Menu
 from Pathfinder import Pathfinder
 from constants import *

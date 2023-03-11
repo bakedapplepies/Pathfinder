@@ -1,6 +1,6 @@
 import pygame
 
-from Window import Window
+from main import Window
 from constants import *
 
 class TextBox(pygame.Surface):

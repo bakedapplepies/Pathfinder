@@ -2,7 +2,7 @@ import pygame
 import sys
 import json
 
-from Window import Window
+from main import Window
 from AbstractScene import AbstractScene
 from TextBox import TextBox
 from constants import *

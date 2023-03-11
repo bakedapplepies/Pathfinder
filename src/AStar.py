@@ -1,7 +1,7 @@
 import pygame
 from queue import PriorityQueue
 
-from Window import Window
+from main import Window
 from Grid import *
 from constants import *
 

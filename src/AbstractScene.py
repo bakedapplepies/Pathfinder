@@ -1,6 +1,6 @@
 import pygame
 
-from Window import Window
+from main import Window
 
 
 class AbstractScene:

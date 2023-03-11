@@ -1,4 +1,4 @@
-from Window import Window
+from main import Window
 from Node import Node
 from constants import *
 
