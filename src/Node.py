@@ -21,7 +21,7 @@ class Node(pygame.Rect):
             self.color = Color.BLACK
             grid.colorGrid[pos[0]][pos[1]] = Color.BLACK
             
-        elif state == NodeState.OBSTACLE:
+        elif state == NodeState.OBSTACLE and not (self.color == Color.RED or self.color == Color.BLUE):
             self.color = Color.PASTEL_LIME
             grid.colorGrid[pos[0]][pos[1]] = Color.PASTEL_LIME
             self.cost = 5

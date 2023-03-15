@@ -1,6 +1,6 @@
 {
     "algorithm": "A*",
-    "mouse_mode": "Mouse",
+    "mouse_mode": "Trackpad",
     "delay": "On",
     "profile": false
 }
