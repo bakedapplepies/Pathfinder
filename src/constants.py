@@ -4,18 +4,18 @@ FPS = 60
 
 # scenes
 class Scenes:
-    PATHFINDER = "Pathfinder"
-    MENU = "Menu"
+    PATHFINDER = 1
+    MENU = 2
     
 # node states
 class NodeState:
-    PATH = "Path"
-    OBSTACLE = "Obstacle"
-    WALL = "Wall"
-    START = "Start"
-    DESTINATION = "Destination"
-    EXPLORED = "Explored"
-    OPTIMAL_PATH = "Optimal Path"
+    PATH = 1
+    OBSTACLE = 2
+    WALL = 3
+    START = 4
+    DESTINATION = 5
+    EXPLORED = 6
+    OPTIMAL_PATH = 6
     
 # algorithms
 class Algorithms:

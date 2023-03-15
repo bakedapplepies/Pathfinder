@@ -1,6 +1,6 @@
 {
-    "algorithm": "A*",
-    "mouse_mode": "Trackpad",
-    "delay": "On",
+    "algorithm": "Dijkstra",
+    "mouse_mode": "Mouse",
+    "delay": "Off",
     "profile": false
 }
