@@ -36,7 +36,7 @@ class Pathfinder(AbstractScene):
                 
             if event.type == pygame.VIDEORESIZE:
                 # self.window = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                self.grid = Grid()
+                self.grid = Grid(self.window)
                 
             if event.type == pygame.KEYDOWN:
                 keydown = True

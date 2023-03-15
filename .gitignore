@@ -4,6 +4,8 @@ venv
 *.aseprite
 icon.ico
 save_data
-*.spec
 build
 dist
+*.spec
+logs
+toexe.bat

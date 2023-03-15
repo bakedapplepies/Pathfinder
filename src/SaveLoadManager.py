@@ -7,8 +7,8 @@ class SaveLoadManager():
         self.dir = dir
         self.extension = extension
         
-        if not os.path.exists("save_data"):
-            os.mkdir("save_data")
+        if not os.path.exists(dir):
+            os.mkdir(dir)
     
     def save(self, filename: str, data):
         with open(self.dir+"/"+filename+self.extension, "wb") as savefile:

@@ -1,3 +1,5 @@
+import os
+
 from main import Window
 from Node import Node
 from constants import *
@@ -12,35 +14,48 @@ class Grid(list):
         self.rowDestination: int = None
         self.columnDestination: int = None
         
-        # self.colorGrid = list()
-        self.colorGrid = window.saveloadManager.load("ColorGrid")
+        # load grid
+        if os.path.isfile("save_data/ColorGrid.dat"):
+            self.colorGrid = window.saveloadManager.load("ColorGrid")
+        else:
+            self.colorGrid = list()
         
         # reinitialize main grid from saved color grid
-        for i in range(0, RESOLUTION[1], self.sideLength):
-            super().append([])
-            # self.colorGrid.append([])
-            for j in range(0, RESOLUTION[0], self.sideLength):
+        if len(self.colorGrid) == 0:
+            for i in range(0, RESOLUTION[1], self.sideLength):
+                super().append([])
                 row = int(i/self.sideLength)
-                col = int(j/self.sideLength)
+                self.colorGrid.append([])
                 
-                super().__getitem__(row).append(Node(j, i, self.sideLength, self.sideLength))
-                
-                if self.colorGrid[row][col] == Color.BLACK:
-                    self[row][col].setState(NodeState.WALL, self, (row, col))
+                for j in range(0, RESOLUTION[0], self.sideLength):
+                    super().__getitem__(row).append(Node(j, i, self.sideLength, self.sideLength))
+                    self.colorGrid.__getitem__(row).append(Color.WHITE)
                     
-                elif self.colorGrid[row][col] == Color.PASTEL_LIME:
-                    self[row][col].setState(NodeState.OBSTACLE, self, (row, col))
-                    
-                elif self.colorGrid[row][col] == Color.RED:
-                    self.setStartNode(row, col)
-                    self[row][col].setState(NodeState.START, self, (row, col))
-                    
-                elif self.colorGrid[row][col] == Color.BLUE:
-                    self.setDestinationNode(row, col)
-                    self[row][col].setState(NodeState.DESTINATION, self, (row, col))
+        else:
+            for i in range(0, RESOLUTION[1], self.sideLength):
+                super().append([])
+                row = int(i/self.sideLength)
                 
-                # self.colorGrid.__getitem__(int(i/self.sideLength)).append(Color.WHITE)
-                
+                for j in range(0, RESOLUTION[0], self.sideLength):
+                    col = int(j/self.sideLength)
+                    
+                    super().__getitem__(row).append(Node(j, i, self.sideLength, self.sideLength))
+                    
+                    if self.colorGrid[row][col] == Color.BLACK:
+                        self[row][col].setState(NodeState.WALL, self, (row, col))
+                        
+                    elif self.colorGrid[row][col] == Color.PASTEL_LIME:
+                        self[row][col].setState(NodeState.OBSTACLE, self, (row, col))
+                        
+                    elif self.colorGrid[row][col] == Color.RED:
+                        self.setStartNode(row, col)
+                        self[row][col].setState(NodeState.START, self, (row, col))
+                        
+                    elif self.colorGrid[row][col] == Color.BLUE:
+                        self.setDestinationNode(row, col)
+                        self[row][col].setState(NodeState.DESTINATION, self, (row, col))
+            
+            
     def getNeighbors(self, nodePos: tuple) -> tuple:
         row = nodePos[0]
         col = nodePos[1]

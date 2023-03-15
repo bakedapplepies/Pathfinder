@@ -1,9 +1,13 @@
 import pygame
+from pygame.locals import *
 import time
 import ctypes
 import sys
 import subprocess
 import pkg_resources
+import cProfile
+import os
+import json
 # import profile
 
 import SceneManager
@@ -17,11 +21,21 @@ class Window(pygame.Surface):
         pygame.Surface.__init__(self, RESOLUTION)
         
         pygame.display.set_caption("Pathfinder")
-        self.pygame_window: pygame.Surface = pygame.display.set_mode(RESOLUTION, pygame.RESIZABLE)
+        flags = DOUBLEBUF | VIDEORESIZE
+        self.pygame_window: pygame.Surface = pygame.display.set_mode(RESOLUTION, flags, 64)
+        
 
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("pathfinder.johnbach")
         icon = pygame.image.load("resources/icons/32_pathfinder_icon.png").convert()
         pygame.display.set_icon(icon)
+        
+        # event handler config
+        pygame.event.set_allowed([
+            pygame.QUIT,
+            pygame.KEYDOWN,
+            pygame.MOUSEBUTTONDOWN,
+            pygame.VIDEORESIZE
+        ])
         
         # Window variables
         self.clock = pygame.time.Clock()
@@ -67,10 +81,9 @@ class Window(pygame.Surface):
             
             self.sceneManager.Render()
             
-            # self.gui.mainloop()
             self.blit(self.pygame_window, (0, 0))
-            pygame.display.update()
-            # self.clock.tick(FPS)
+            pygame.display.flip()
+            
     
 def checkDependencies() -> None:
     required = { "pygame", "pillow" }
@@ -81,10 +94,25 @@ def checkDependencies() -> None:
         python = sys.executable
         subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
 
+def main(profile: bool = False):
+    with open("config/settings.json") as datafile:
+        data = json.load(datafile)
+        if data["profile"]: profile = True
+    
+    if not os.path.exists("logs"): os.mkdir("logs")
+    if profile:
+        with open("logs/profile.log", "w") as sys.stdout:
+            cProfile.run("pathfind()", sort="tottime")
+    else:
+        pathfind()
 
-if __name__ == "__main__":
+def pathfind():
     # checkDependencies()
     pygame.init()
     
     window = Window()
     window.Loop()
+    
+
+if __name__ == "__main__":
+    main()
