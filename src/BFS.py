@@ -19,7 +19,7 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
         if not window.paused:
             if window.sceneManager.pathfinder.forcePrintFrontier:
                 current = frontier.get()
-                grid[current[1][0]][current[1][1]].setState(NodeState.EXPLORED)
+                grid[current[1][0]][current[1][1]].setState(NodeState.EXPLORED, grid)
                 if frontier.empty():
                     break
             
@@ -29,7 +29,7 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
                     if nextNode == destination:
                         # traceback to start
                         while current != start:
-                            grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH)
+                            grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH, grid)
                             current = came_from[current]
                             
                             # keeping the window alive
@@ -50,7 +50,7 @@ def BreadthFirstSearch(grid: Grid, window: Window) -> None:
                     if nextNode not in came_from:
                         frontier.put(nextNode)
                         came_from[nextNode] = current
-                        grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED)
+                        grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED, grid)
 
         # keeping the window alive
         window.calculateDeltaTime()

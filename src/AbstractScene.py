@@ -14,3 +14,6 @@ class AbstractScene:
     def Render(self):
         pass
     
+    def LoadScene(self):
+        pass
+    

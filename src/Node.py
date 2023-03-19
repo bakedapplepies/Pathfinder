@@ -11,7 +11,7 @@ class Node(pygame.Rect):
         
         self.cost = 1
 
-    def setState(self, state: str, grid=None, pos: tuple=None):
+    def setState(self, state, grid=None, pos: tuple=None):
         if state == NodeState.PATH:
             self.color = Color.WHITE
             grid.colorGrid[pos[0]][pos[1]] = Color.WHITE
@@ -43,4 +43,10 @@ class Node(pygame.Rect):
             
         elif state == NodeState.OPTIMAL_PATH:
             self.color = Color.PURPLE
+        
+        pygame.draw.rect(grid.window.pygame_window, self.color, self, 0, 2)
+        pygame.draw.rect(grid.window.pygame_window, self.border_color, self, 1, 2)
+        
+        # when initializing window, begin (the time variable to calculate deltaTime) is None
+        if grid.window.begin != None: grid.window.addUpdateArea(self)
             

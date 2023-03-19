@@ -1,3 +1,4 @@
+import pygame
 import os
 
 from main import Window
@@ -7,6 +8,8 @@ from constants import *
 
 class Grid(list):
     def __init__(self, window: Window):
+        self.window = window
+        
         self.sideLength = 20
         
         self.rowStart: int = None
@@ -42,20 +45,23 @@ class Grid(list):
                     super().__getitem__(row).append(Node(j, i, self.sideLength, self.sideLength))
                     
                     if self.colorGrid[row][col] == Color.BLACK:
-                        self[row][col].setState(NodeState.WALL, self, (row, col))
+                        self.__getitem__(row)[col].setState(NodeState.WALL, self, (row, col))
                         
                     elif self.colorGrid[row][col] == Color.PASTEL_LIME:
-                        self[row][col].setState(NodeState.OBSTACLE, self, (row, col))
+                        self.__getitem__(row)[col].setState(NodeState.OBSTACLE, self, (row, col))
                         
                     elif self.colorGrid[row][col] == Color.RED:
-                        self.setStartNode(row, col)
-                        self[row][col].setState(NodeState.START, self, (row, col))
+                        self.__getitem__(row)[col].setState(NodeState.START, self, (row, col))
                         
                     elif self.colorGrid[row][col] == Color.BLUE:
-                        self.setDestinationNode(row, col)
-                        self[row][col].setState(NodeState.DESTINATION, self, (row, col))
-            
-            
+                        self.__getitem__(row)[col].setState(NodeState.DESTINATION, self, (row, col))
+                        
+        # redraw grid after each initialization
+        for i in range(len(self)):
+            for j in range(len(self[0])):
+                pygame.draw.rect(window.pygame_window, self[i][j].color, self[i][j], 0, 2)
+                pygame.draw.rect(window.pygame_window, self[i][j].border_color, self[i][j], 1, 2)
+                    
     def getNeighbors(self, nodePos: tuple) -> tuple:
         row = nodePos[0]
         col = nodePos[1]

@@ -8,9 +8,7 @@ from TextBox import TextBox
 from constants import *
 
 
-"""
-    GUI for controlling the Pathfinder window
-"""
+# GUI for controlling the Pathfinder window
 class Menu(AbstractScene):
     def __init__(self, window: Window):
         # window
@@ -43,8 +41,10 @@ class Menu(AbstractScene):
             json.dump(self.settingsData, datafile, indent=4)
         
     # INPUTS
-    def PollInput(self):
+    def PollInput(self) -> None:
         keydown = False
+        
+        # Special Events ----------
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.window.saveloadManager.save("ColorGrid", self.window.sceneManager.pathfinder.grid.colorGrid)
@@ -52,41 +52,42 @@ class Menu(AbstractScene):
                 pygame.quit()
                 sys.exit()
                 
-            # delay label
-            elif event.type == pygame.MOUSEBUTTONDOWN and self.delay_label.text_box.collidepoint(pygame.mouse.get_pos()):  # get Rect
-                if self.delay == "On":
-                    self.delay = "Off"
-                    self.settingsData["delay"] = "Off"
-                elif self.delay == "Off":
-                    self.delay = "On"
-                    self.settingsData["delay"] = "On"
-                self.delay_label.setText(f"Enable delay: {self.delay}")
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # delay label
+                if self.delay_label.text_rect.collidepoint(pygame.mouse.get_pos()):  # get Rect
+                    if self.delay == "On":
+                        self.delay = "Off"
+                        self.settingsData["delay"] = "Off"
+                    elif self.delay == "Off":
+                        self.delay = "On"
+                        self.settingsData["delay"] = "On"
+                    self.delay_label.setText(f"Enable delay: {self.delay}")
                 
-            # mouse mode label 
-            elif event.type == pygame.MOUSEBUTTONDOWN and self.mouse_mode_label.text_box.collidepoint(pygame.mouse.get_pos()):
-                if self.mouse_mode == "Trackpad":
-                    self.mouse_mode = "Mouse"
-                    self.settingsData["mouse_mode"] = self.mouse_mode
-                elif self.mouse_mode == "Mouse":
-                    self.mouse_mode = "Trackpad"
-                    self.settingsData["mouse_mode"] = self.mouse_mode
-                self.mouse_mode_label.setText(f"Mouse mode: {self.mouse_mode}")
-            
-            # algorithm label
-            elif event.type == pygame.MOUSEBUTTONDOWN and self.algorithm_label.text_box.collidepoint(pygame.mouse.get_pos()):
-                if self.algorithm == Algorithms.BFS:
-                    self.algorithm = Algorithms.DIJKSTRA
-                    self.settingsData["algorithm"] = Algorithms.DIJKSTRA
-                elif self.algorithm == Algorithms.DIJKSTRA:
-                    self.algorithm = Algorithms.GREEDY_BFS
-                    self.settingsData["algorithm"] = Algorithms.GREEDY_BFS
-                elif self.algorithm == Algorithms.GREEDY_BFS:
-                    self.algorithm = Algorithms.ASTAR
-                    self.settingsData["algorithm"] = Algorithms.ASTAR
-                elif self.algorithm == Algorithms.ASTAR:
-                    self.algorithm = Algorithms.BFS
-                    self.settingsData["algorithm"] = Algorithms.BFS
-                self.algorithm_label.setText(f"Algorithm: {self.algorithm}")
+                # mouse mode label 
+                elif self.mouse_mode_label.text_rect.collidepoint(pygame.mouse.get_pos()):
+                    if self.mouse_mode == "Trackpad":
+                        self.mouse_mode = "Mouse"
+                        self.settingsData["mouse_mode"] = self.mouse_mode
+                    elif self.mouse_mode == "Mouse":
+                        self.mouse_mode = "Trackpad"
+                        self.settingsData["mouse_mode"] = self.mouse_mode
+                    self.mouse_mode_label.setText(f"Mouse mode: {self.mouse_mode}")
+                
+                # algorithm label
+                elif self.algorithm_label.text_rect.collidepoint(pygame.mouse.get_pos()):
+                    if self.algorithm == Algorithms.BFS:
+                        self.algorithm = Algorithms.DIJKSTRA
+                        self.settingsData["algorithm"] = Algorithms.DIJKSTRA
+                    elif self.algorithm == Algorithms.DIJKSTRA:
+                        self.algorithm = Algorithms.GREEDY_BFS
+                        self.settingsData["algorithm"] = Algorithms.GREEDY_BFS
+                    elif self.algorithm == Algorithms.GREEDY_BFS:
+                        self.algorithm = Algorithms.ASTAR
+                        self.settingsData["algorithm"] = Algorithms.ASTAR
+                    elif self.algorithm == Algorithms.ASTAR:
+                        self.algorithm = Algorithms.BFS
+                        self.settingsData["algorithm"] = Algorithms.BFS
+                    self.algorithm_label.setText(f"Algorithm: {self.algorithm}")
             
             elif event.type == pygame.KEYDOWN:
                 keydown = True
@@ -94,11 +95,14 @@ class Menu(AbstractScene):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE] and keydown:
             self.window.paused = False
-            self.window.sceneManager.pathfinder.Render()
             self.window.sceneManager.switchScene(Scenes.PATHFINDER)
     
     # RENDERING
     def Render(self):
+        pass
+        
+    def LoadScene(self):
+        self.pygame_window.fill(Color.WHITE)
         self.window.sceneManager.pathfinder.DrawGrid()
         self.pygame_window.blit(self.transparent_background, (0, 0))
         

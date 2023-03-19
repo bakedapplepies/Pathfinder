@@ -1,6 +1,6 @@
 {
-    "algorithm": "A*",
-    "mouse_mode": "Trackpad",
+    "algorithm": "Greedy BFS",
+    "mouse_mode": "Mouse",
     "delay": "On",
-    "profile": false
+    "profile": true
 }
