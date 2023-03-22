@@ -22,8 +22,11 @@ class SceneManager(AbstractScene):
             Scenes.MENU: self.menu,
         }
         
-    def switchScene(self, sceneName) -> None:
+    def SwitchScene(self, sceneName) -> None:
         self.scene = sceneName
+        self.LoadScene()
+        
+    def LoadScene(self):
         self.scenes[self.scene].LoadScene()
         pygame.display.update()
         
@@ -31,12 +34,12 @@ class SceneManager(AbstractScene):
         self.update_rectangles.append(rect)
         
     def PollInput(self):
+        """Poll Inputs and get to-be-updated areas/rects for Render method"""
         self.update_rectangles = list()
         self.scenes[self.scene].PollInput()
         
     def Render(self):
-        self.scenes[self.scene].Render()
-        
+        """Update screen using rects"""
         for rectangle in self.update_rectangles:
             pygame.display.update(rectangle)
                     

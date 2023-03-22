@@ -39,7 +39,7 @@ class Node(pygame.Rect):
             self.cost = 1
             
         elif state == NodeState.EXPLORED:
-            self.color = tuple(i*0.82 for i in self.color)
+            self.color = tuple(i*0.82 for i in self.color)  # darken color
             
         elif state == NodeState.OPTIMAL_PATH:
             self.color = Color.PURPLE
@@ -49,4 +49,5 @@ class Node(pygame.Rect):
         
         # when initializing window, begin (the time variable to calculate deltaTime) is None
         if grid.window.begin != None: grid.window.addUpdateArea(self)
+        # print("hirys it's irys")
             

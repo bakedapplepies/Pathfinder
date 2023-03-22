@@ -12,12 +12,12 @@ class TextBox(pygame.Surface):
         self.my_font: pygame.font.Font = pygame.font.SysFont("Bahnschrift", size)
         self.text_surface = self.my_font.render(text, True, Color.WHITE, None)
         
-        self.text_rect = self.text_surface.get_rect(topleft=self.pos)
-
     def Render(self):
         self.window.pygame_window.blit(self.text_surface, self.pos)
-        self.window.addUpdateArea(self.text_surface.get_rect(topleft=self.pos))
 
     def setText(self, text: str):
         self.text_surface = self.my_font.render(text, True, Color.WHITE, None)  # text, antialias, color
-        self.window.sceneManager.menu.LoadScene()
+        self.window.sceneManager.LoadScene()
+        
+    def getTextBox(self) -> pygame.Rect:
+        return self.text_surface.get_rect(topleft=self.pos)

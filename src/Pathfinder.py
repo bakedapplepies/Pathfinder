@@ -60,7 +60,7 @@ class Pathfinder(AbstractScene):
                 node.setState(NodeState.PATH, self.grid, grid_pos)
             
             elif mouse_buttons[0]:
-                if not pygame.key.get_pressed()[pygame.K_LCTRL] and node.color != Color.BLACK:
+                if not pygame.key.get_pressed()[pygame.K_LCTRL]:
                     node.setState(NodeState.WALL, self.grid, grid_pos)
                 else:
                     node.setState(NodeState.OBSTACLE, self.grid, grid_pos)
@@ -108,7 +108,7 @@ class Pathfinder(AbstractScene):
         # Menu
         elif keys[pygame.K_ESCAPE] and keydown:
             self.window.paused = True
-            self.window.sceneManager.switchScene(Scenes.MENU)
+            self.window.sceneManager.SwitchScene(Scenes.MENU)
             
         # New Grid
         elif keys[pygame.K_g] and keydown:
@@ -128,22 +128,20 @@ class Pathfinder(AbstractScene):
             self.forcePrintFrontier = not self.forcePrintFrontier
             
     # RENDERING
-    def Render(self):
-        pass
-    
     def LoadScene(self):
         self.pygame_window.fill(Color.WHITE)
         self.DrawGrid()
         
     def DrawGrid(self):
-        for i in range(len(self.grid)):
-            for j in range(len(self.grid[0])):
-                pygame.draw.rect(self.pygame_window, self.grid[i][j].color, self.grid[i][j], 0, 2)
-                pygame.draw.rect(self.pygame_window, self.grid[i][j].border_color, self.grid[i][j], 1, 2)
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[0])):
+                pygame.draw.rect(self.pygame_window, self.grid[row][col].color, self.grid[row][col], 0, 2)
+                pygame.draw.rect(self.pygame_window, self.grid[row][col].border_color, self.grid[row][col], 1, 2)
         
     # Other        
     def resetExploredNodes(self):
-        for i in range(len(self.grid)):
-            for j in range(len(self.grid[0])):
-                self.grid[i][j].color = self.grid.colorGrid[i][j]
+        for row in range(len(self.grid)):
+            for col in range(len(self.grid[0])):
+                self.grid[row][col].color = self.grid.colorGrid[row][col]
         self.DrawGrid()
+        pygame.display.update()

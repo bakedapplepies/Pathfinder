@@ -1,6 +1,5 @@
 {
-    "algorithm": "Greedy BFS",
+    "algorithm": "A*",
     "mouse_mode": "Mouse",
-    "delay": "On",
-    "profile": true
+    "profile": false
 }

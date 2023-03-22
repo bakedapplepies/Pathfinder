@@ -57,10 +57,15 @@ class Window():
     def addUpdateArea(self, rect: pygame.Rect):
         self.sceneManager.addUpdateRect(rect)
         
+    def addUpdateAreas(self, rects: list):
+        for rect in rects:
+            self.sceneManager.addUpdateRect(rect)
+        
     def showFPS(self):
         if self.deltaTime != 0: pygame.display.set_caption(f"Pathfinder - FPS: {self.windowFPS}")
 
     def calculateDeltaTime(self):
+        # self.clock.tick(120)
         self.deltaTime = time.time() - self.begin
         self.begin = time.time()
         self.calculateAndShowFPS()
@@ -88,13 +93,19 @@ class Window():
             
     
 def checkDependencies() -> None:
-    required = { "pygame", "pillow" }
+    required = { "pygame" }
     installed = { pkg.key for pkg in pkg_resources.working_set }
     missing = required - installed
     
     if missing:
         python = sys.executable
         subprocess.check_call([python, '-m', 'pip', 'install', *missing], stdout=subprocess.DEVNULL)
+
+def pathfind():
+    # checkDependencies()
+    
+    window = Window()
+    window.Loop()
 
 def main():
     profile = False
@@ -109,13 +120,7 @@ def main():
             cProfile.run("pathfind()", sort="tottime")
     else:
         pathfind()
-
-def pathfind():
-    # checkDependencies()
-    
-    window = Window()
-    window.Loop()
-    
+        
 
 if __name__ == "__main__":
     main()

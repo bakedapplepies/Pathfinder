@@ -1,4 +1,5 @@
 import pygame
+import math
 import os
 
 from main import Window
@@ -25,24 +26,24 @@ class Grid(list):
         
         # reinitialize main grid from saved color grid
         if len(self.colorGrid) == 0:
-            for i in range(0, RESOLUTION[1], self.sideLength):
+            for y in range(0, RESOLUTION[1], self.sideLength):
                 super().append([])
-                row = int(i/self.sideLength)
+                row = int(y/self.sideLength)
                 self.colorGrid.append([])
                 
-                for j in range(0, RESOLUTION[0], self.sideLength):
-                    super().__getitem__(row).append(Node(j, i, self.sideLength, self.sideLength))
+                for x in range(0, RESOLUTION[0], self.sideLength):
+                    super().__getitem__(row).append(Node(x, y, self.sideLength, self.sideLength))
                     self.colorGrid.__getitem__(row).append(Color.WHITE)
                     
         else:
-            for i in range(0, RESOLUTION[1], self.sideLength):
+            for y in range(0, RESOLUTION[1], self.sideLength):
                 super().append([])
-                row = int(i/self.sideLength)
+                row = int(y/self.sideLength)
                 
-                for j in range(0, RESOLUTION[0], self.sideLength):
-                    col = int(j/self.sideLength)
+                for x in range(0, RESOLUTION[0], self.sideLength):
+                    col = int(x/self.sideLength)
                     
-                    super().__getitem__(row).append(Node(j, i, self.sideLength, self.sideLength))
+                    super().__getitem__(row).append(Node(x, y, self.sideLength, self.sideLength))
                     
                     if self.colorGrid[row][col] == Color.BLACK:
                         self.__getitem__(row)[col].setState(NodeState.WALL, self, (row, col))
@@ -57,10 +58,10 @@ class Grid(list):
                         self.__getitem__(row)[col].setState(NodeState.DESTINATION, self, (row, col))
                         
         # redraw grid after each initialization
-        for i in range(len(self)):
-            for j in range(len(self[0])):
-                pygame.draw.rect(window.pygame_window, self[i][j].color, self[i][j], 0, 2)
-                pygame.draw.rect(window.pygame_window, self[i][j].border_color, self[i][j], 1, 2)
+        for row in range(len(self)):
+            for col in range(len(self[0])):
+                pygame.draw.rect(window.pygame_window, self[row][col].color, self[row][col], 0, 2)
+                pygame.draw.rect(window.pygame_window, self[row][col].border_color, self[row][col], 1, 2)
                     
     def getNeighbors(self, nodePos: tuple) -> tuple:
         row = nodePos[0]
@@ -84,10 +85,16 @@ class Grid(list):
             )
         )
         
-    def getDistance(self, node1: tuple, node2: tuple):
-        # return (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1])) * max(self[node1[0]][node1[1]].cost, self[node2[0]][node2[1]].cost)
-        return (pow(node1[0] - node2[0], 2) + pow(node1[1] - node2[1], 2)) + (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1]))#* max(self[node1[0]][node1[1]].cost, self[node2[0]][node2[1]].cost)
+    def getManhattanDistance(self, node1: tuple, node2: tuple):
+        return (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1])) * self[node2[0]][node2[1]].cost
+    
+    def getEuclideanDistance(self, node1: tuple, node2: tuple):
+        return math.sqrt((pow(node1[0] - node2[0], 2) + pow(node1[1] - node2[1], 2)) + (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1]))) * self[node2[0]][node2[1]].cost
+        # return (pow(node1[0] - node2[0], 2) + pow(node1[1] - node2[1], 2)) + (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1])) * self[node2[0]][node2[1]].cost
                 
+    def getNode(self, tup: tuple):
+        return self[tup[0]][tup[1]]            
+    
     def setStartNode(self, row: int, col: int) -> None:
         if self.rowStart != None and (row != self.rowStart or col != self.columnStart) and (row < len(self) and col < len(self[0])):
             self[self.rowStart][self.columnStart].setState(NodeState.PATH, self, (self.rowStart, self.columnStart))

@@ -1,10 +1,7 @@
-import pygame
-import heapq
-import logging
 from queue import PriorityQueue
 
 from main import Window
-from Grid import *
+from Grid import Grid
 from constants import *
 
 
@@ -20,53 +17,48 @@ def Dijkstra(grid: Grid, window: Window) -> None:
     cost_so_far[start] = 0
         
     while not frontier.empty():
+        
+        window.calculateDeltaTime()
+        window.sceneManager.PollInput()
+        
         if not window.paused:
+            current = frontier.get()[1]
+            current_node = grid.getNode(current)
+            
             if window.sceneManager.pathfinder.forcePrintFrontier:
-                current = frontier.get()
-                grid[current[1][0]][current[1][1]].setState(NodeState.EXPLORED, grid)
+                current_node.setState(NodeState.EXPLORED, grid)
                 if frontier.empty():
                     break
-                
+            
             else:
-                current = frontier.get()[1]  # only get the node, not the priority
-                
                 for nextNode in grid.getNeighbors(current):
-                    new_cost = cost_so_far[current] + grid.getDistance(current, nextNode)
                     
                     if nextNode == destination:
                         # traceback to start
                         while current != start:
-                            grid[current[0]][current[1]].setState(NodeState.OPTIMAL_PATH, grid)
-                            current = came_from[current]
-                            
-                            # keeping the window alive
+                            window.sceneManager.PollInput()
                             window.calculateDeltaTime()
                             
-                            window.sceneManager.PollInput()
-                            if window.sceneManager.menu.delay == "On" and window.sceneManager.scene == Scenes.PATHFINDER:
-                                window.sceneManager.Render()
-                            elif window.sceneManager.scene == Scenes.MENU:
-                                window.sceneManager.Render()
-                            pygame.display.update()
+                            current_node = grid.getNode(current)
+                            current_node.setState(NodeState.OPTIMAL_PATH, grid)
+                            current = came_from[current]
+                                                        
+                            # keeping the window alive
+                            window.sceneManager.Render()
                             
                         return None
                     
-                    if grid[nextNode[0]][nextNode[1]].color == Color.BLACK:
+                    if current_node.color == Color.BLACK:
                         continue
+                    
+                    new_cost = cost_so_far[current] + grid.getManhattanDistance(current, nextNode)
                     
                     if nextNode not in cost_so_far or new_cost < cost_so_far[nextNode]:
                         cost_so_far[nextNode] = new_cost
                         priority = new_cost
                         frontier.put((priority, nextNode))
                         came_from[nextNode] = current
-                        grid[nextNode[0]][nextNode[1]].setState(NodeState.EXPLORED, grid)
+                        grid.getNode(nextNode).setState(NodeState.EXPLORED, grid)
 
         # keeping the window alive
-        window.calculateDeltaTime()
-        
-        window.sceneManager.PollInput()
-        if window.sceneManager.menu.delay == "On" and window.sceneManager.scene == Scenes.PATHFINDER:
-            window.sceneManager.Render()
-        elif window.sceneManager.scene == Scenes.MENU:
-            window.sceneManager.Render()
-        pygame.display.update()
+        window.sceneManager.Render()

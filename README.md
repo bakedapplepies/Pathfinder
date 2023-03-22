@@ -23,4 +23,5 @@
 - Until the middle mouse button is released, walls affected by starting points/destinations will revert back to walls.
 - Speed of program is not frame independant (CPU speed matters), so maybe that could be fixed while keeping a high framerate
 - Make Grid data scalable on sideLength of nodes
-- Add a scene-loading function to each scene for better abstraction
+- Fixed Text Boxes
+- Tweak Dijkstra's Heuristics for better obstacle-evasion

@@ -11,9 +11,6 @@ class AbstractScene:
     def PollInput(self):
         pass
     
-    def Render(self):
-        pass
-    
     def LoadScene(self):
         pass
     
