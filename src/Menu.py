@@ -14,7 +14,7 @@ class Menu(AbstractScene):
         self.window = window
         self.pygame_window = window.pygame_window
         
-        self.transparent_background = pygame.Surface(RESOLUTION)
+        self.transparent_background = pygame.Surface(GRID_RESOLUTION)
         self.transparent_background.set_alpha(240)
         self.transparent_background.fill(Color.GREY)
         
@@ -23,7 +23,7 @@ class Menu(AbstractScene):
             self.settingsData = json.load(datafile)
         
         # widgets
-        self.settings_label = TextBox(self.window, "Settings", 96, (RESOLUTION[0]/10, RESOLUTION[1]/6))
+        self.settings_label = TextBox(self.window, "Settings", 96, (GRID_RESOLUTION[0]/10, GRID_RESOLUTION[1]/6))
     
         self.mouse_mode: str = self.settingsData["mouse_mode"]
         self.mouse_mode_label = TextBox(self.window, f"Mouse mode: {self.mouse_mode}", 36, (self.settings_label.pos[0] + 10, self.settings_label.pos[1] + 110))

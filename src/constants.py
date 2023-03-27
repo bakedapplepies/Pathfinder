@@ -1,5 +1,6 @@
 # window details
-RESOLUTION = (1200, 800)
+SCREEN_RESOLUTION = (1400, 800)
+GRID_RESOLUTION = (1200, 800)
 FPS = 60
 
 # scenes

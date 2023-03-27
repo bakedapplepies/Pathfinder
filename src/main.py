@@ -22,7 +22,7 @@ class Window():
         # Main window        
         pygame.display.set_caption("Pathfinder")
         flags = DOUBLEBUF | VIDEORESIZE
-        self.pygame_window: pygame.Surface = pygame.display.set_mode(RESOLUTION, flags, 64)
+        self.pygame_window: pygame.Surface = pygame.display.set_mode(SCREEN_RESOLUTION, flags, 64)
         self.pygame_window.fill(Color.WHITE)
         
         # icon
@@ -65,7 +65,7 @@ class Window():
         if self.deltaTime != 0: pygame.display.set_caption(f"Pathfinder - FPS: {self.windowFPS}")
 
     def calculateDeltaTime(self):
-        # self.clock.tick(120)
+        # self.clock.tick(2)
         self.deltaTime = time.time() - self.begin
         self.begin = time.time()
         self.calculateAndShowFPS()

@@ -26,21 +26,21 @@ class Grid(list):
         
         # reinitialize main grid from saved color grid
         if len(self.colorGrid) == 0:
-            for y in range(0, RESOLUTION[1], self.sideLength):
+            for y in range(0, GRID_RESOLUTION[1], self.sideLength):
                 super().append([])
                 row = int(y/self.sideLength)
                 self.colorGrid.append([])
                 
-                for x in range(0, RESOLUTION[0], self.sideLength):
+                for x in range(0, GRID_RESOLUTION[0], self.sideLength):
                     super().__getitem__(row).append(Node(x, y, self.sideLength, self.sideLength))
                     self.colorGrid.__getitem__(row).append(Color.WHITE)
                     
         else:
-            for y in range(0, RESOLUTION[1], self.sideLength):
+            for y in range(0, GRID_RESOLUTION[1], self.sideLength):
                 super().append([])
                 row = int(y/self.sideLength)
                 
-                for x in range(0, RESOLUTION[0], self.sideLength):
+                for x in range(0, GRID_RESOLUTION[0], self.sideLength):
                     col = int(x/self.sideLength)
                     
                     super().__getitem__(row).append(Node(x, y, self.sideLength, self.sideLength))
@@ -86,14 +86,21 @@ class Grid(list):
         )
         
     def getManhattanDistance(self, node1: tuple, node2: tuple):
-        return (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1])) * self[node2[0]][node2[1]].cost
+        (row1, col1) = node1
+        (row2, col2) = node2
+        drow = abs(row1 - row2)
+        dcol = abs(col1 - col2)
+        return (drow + dcol) * self[row2][col2].cost
     
     def getEuclideanDistance(self, node1: tuple, node2: tuple):
-        return math.sqrt((pow(node1[0] - node2[0], 2) + pow(node1[1] - node2[1], 2)) + (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1]))) * self[node2[0]][node2[1]].cost
-        # return (pow(node1[0] - node2[0], 2) + pow(node1[1] - node2[1], 2)) + (abs(node1[0] - node2[0]) + abs(node1[1] - node2[1])) * self[node2[0]][node2[1]].cost
+        (row1, col1) = node1
+        (row2, col2) = node2
+        drow = abs(row1 - row2)
+        dcol = abs(col1 - col2)
+        return math.sqrt(drow ** 2 + dcol ** 2) * self[row2][col2].cost
                 
-    def getNode(self, tup: tuple):
-        return self[tup[0]][tup[1]]            
+    def getNode(self, tup: tuple) -> Node:
+        return self[tup[0]][tup[1]]    
     
     def setStartNode(self, row: int, col: int) -> None:
         if self.rowStart != None and (row != self.rowStart or col != self.columnStart) and (row < len(self) and col < len(self[0])):

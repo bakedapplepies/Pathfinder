@@ -22,8 +22,8 @@ def Dijkstra(grid: Grid, window: Window) -> None:
         window.sceneManager.PollInput()
         
         if not window.paused:
-            current = frontier.get()[1]
-            current_node = grid.getNode(current)
+            currentPos = frontier.get()[1]
+            current_node = grid.getNode(currentPos)
             
             if window.sceneManager.pathfinder.forcePrintFrontier:
                 current_node.setState(NodeState.EXPLORED, grid)
@@ -31,34 +31,34 @@ def Dijkstra(grid: Grid, window: Window) -> None:
                     break
             
             else:
-                for nextNode in grid.getNeighbors(current):
+                for nextNodePos in grid.getNeighbors(currentPos):
                     
-                    if nextNode == destination:
+                    if nextNodePos == destination:
                         # traceback to start
-                        while current != start:
+                        while currentPos != start:
                             window.sceneManager.PollInput()
                             window.calculateDeltaTime()
                             
-                            current_node = grid.getNode(current)
+                            current_node = grid.getNode(currentPos)
                             current_node.setState(NodeState.OPTIMAL_PATH, grid)
-                            current = came_from[current]
+                            currentPos = came_from[currentPos]
                                                         
                             # keeping the window alive
                             window.sceneManager.Render()
                             
                         return None
                     
-                    if current_node.color == Color.BLACK:
+                    if grid.getNode(nextNodePos).color == Color.BLACK:
                         continue
                     
-                    new_cost = cost_so_far[current] + grid.getManhattanDistance(current, nextNode)
+                    new_cost = cost_so_far[currentPos] + grid.getEuclideanDistance(currentPos, nextNodePos)
                     
-                    if nextNode not in cost_so_far or new_cost < cost_so_far[nextNode]:
-                        cost_so_far[nextNode] = new_cost
+                    if nextNodePos not in cost_so_far or new_cost < cost_so_far[nextNodePos]:
+                        cost_so_far[nextNodePos] = new_cost
                         priority = new_cost
-                        frontier.put((priority, nextNode))
-                        came_from[nextNode] = current
-                        grid.getNode(nextNode).setState(NodeState.EXPLORED, grid)
+                        frontier.put((priority, nextNodePos))
+                        came_from[nextNodePos] = currentPos
+                        grid.getNode(nextNodePos).setState(NodeState.EXPLORED, grid)
 
         # keeping the window alive
         window.sceneManager.Render()

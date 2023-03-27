@@ -24,4 +24,5 @@
 - Speed of program is not frame independant (CPU speed matters), so maybe that could be fixed while keeping a high framerate
 - Make Grid data scalable on sideLength of nodes
 - Fixed Text Boxes
-- Tweak Dijkstra's Heuristics for better obstacle-evasion
+- Tooltip
+- 

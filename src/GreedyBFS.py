@@ -20,8 +20,8 @@ def GreedyBFS(grid: Grid, window: Window) -> None:
         window.sceneManager.PollInput()
         
         if not window.paused:
-            current = frontier.get()[1]
-            current_node = grid.getNode(current)
+            currentPos = frontier.get()[1]
+            current_node = grid.getNode(currentPos)
             
             if window.sceneManager.pathfinder.forcePrintFrontier:
                 current_node.setState(NodeState.EXPLORED, grid)
@@ -29,31 +29,31 @@ def GreedyBFS(grid: Grid, window: Window) -> None:
                     break
             
             else:
-                for nextNode in grid.getNeighbors(current):  
+                for nextNodePos in grid.getNeighbors(currentPos):  
                                       
-                    if nextNode == destination:
+                    if nextNodePos == destination:
                         # traceback to start
-                        while current != start:
+                        while currentPos != start:
                             window.sceneManager.PollInput()
                             window.calculateDeltaTime()
                             
-                            current_node = grid.getNode(current)
+                            current_node = grid.getNode(currentPos)
                             current_node.setState(NodeState.OPTIMAL_PATH, grid)
-                            current = came_from[current]
+                            currentPos = came_from[currentPos]
                                                         
                             # keeping the window alive
                             window.sceneManager.Render()
                             
                         return None
                     
-                    if current_node.color == Color.BLACK:
+                    if grid.getNode(nextNodePos).color == Color.BLACK:
                         continue
                     
-                    if nextNode not in came_from:
-                        priority = grid.getEuclideanDistance(nextNode, destination)
-                        frontier.put((priority, nextNode))
-                        came_from[nextNode] = current
-                        grid.getNode(nextNode).setState(NodeState.EXPLORED, grid)
+                    if nextNodePos not in came_from:
+                        priority = grid.getManhattanDistance(nextNodePos, destination)
+                        frontier.put((priority, nextNodePos))
+                        came_from[nextNodePos] = currentPos
+                        grid.getNode(nextNodePos).setState(NodeState.EXPLORED, grid)
 
         # keeping the window alive
         window.sceneManager.Render()
