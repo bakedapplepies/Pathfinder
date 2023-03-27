@@ -16,7 +16,7 @@ class NodeState:
     START = 4
     DESTINATION = 5
     EXPLORED = 6
-    OPTIMAL_PATH = 6
+    OPTIMAL_PATH = 7
     
 # algorithms
 class Algorithms:
